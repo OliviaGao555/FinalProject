@@ -25,19 +25,20 @@ public class QuizApp extends Application {
         // Set up the common section with buttons
         commonSection = new VBox(10);
         Button submitButton = new Button("Submit");
+        Button helpButton = new Button("Help");
+        Button lastButton = new Button("Last Question");
         Button nextButton = new Button("Next Question");
-        Button previousButton = new Button("Previous Question");
-
-        commonSection.getChildren().addAll(submitButton, nextButton, previousButton);
+        HBox hButtons = new HBox(20, submitButton, helpButton, lastButton, nextButton);
+        commonSection.getChildren().addAll(hButtons);
         root.setBottom(commonSection);
 
         questionSection = new Pane();
-        questionSection.setBorder(new Border(new BorderStroke(
-                Color.BLACK,
-                BorderStrokeStyle.SOLID,
-                CornerRadii.EMPTY,
-                new BorderWidths(3)
-        )));
+//        questionSection.setBorder(new Border(new BorderStroke(
+//                Color.BLACK,
+//                BorderStrokeStyle.SOLID,
+//                CornerRadii.EMPTY,
+//                new BorderWidths(3)
+//        )));
         questionSection.setPadding(new Insets(10));
 
         root.setCenter(questionSection);
