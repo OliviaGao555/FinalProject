@@ -33,15 +33,21 @@ public class QuizApp extends Application {
         root.setBottom(commonSection);
 
         questionSection = new Pane();
-//        questionSection.setBorder(new Border(new BorderStroke(
-//                Color.BLACK,
-//                BorderStrokeStyle.SOLID,
-//                CornerRadii.EMPTY,
-//                new BorderWidths(3)
-//        )));
+        questionSection.setBorder(new Border(new BorderStroke(
+                Color.BLACK,
+                BorderStrokeStyle.SOLID,
+                CornerRadii.EMPTY,
+                new BorderWidths(3)
+        )));
         questionSection.setPadding(new Insets(10));
 
         root.setCenter(questionSection);
+
+        // sample questions
+        String questionText = "What is the capital of France?";
+        String[] options = {"Berlin", "Madrid", "Paris", "Rome"};
+        Question q1 = new MultipleChoiceQuestion(questionText, options);
+        questionSection.getChildren().add(q1.getQuestionPane());
 
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
