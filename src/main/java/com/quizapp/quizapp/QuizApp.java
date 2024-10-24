@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -20,6 +21,8 @@ public class QuizApp extends Application {
     private Pane questionSection;
     private List<Question> questions;
     private int currentQuestionIndex = 0;
+    private Label questionCounterLabel;
+
 
     public static void main(String[] args) {
         launch(args);
@@ -36,7 +39,10 @@ public class QuizApp extends Application {
         Button previousButton = new Button("Previous Question");
         Button nextButton = new Button("Next Question");
         HBox hButtons = new HBox(20, submitButton, helpButton, previousButton, nextButton);
-        commonSection.getChildren().addAll(hButtons);
+
+        questionCounterLabel = new Label();
+
+        commonSection.getChildren().addAll(hButtons, questionCounterLabel);
         root.setBottom(commonSection);
 
         // Set up the question section
@@ -52,6 +58,7 @@ public class QuizApp extends Application {
 
         // Initialize questions
         initializeQuestions();
+        updateQuestionCounter();
 
         // Display the first question
         displayQuestion(currentQuestionIndex);
@@ -67,6 +74,7 @@ public class QuizApp extends Application {
             if (currentQuestionIndex < questions.size() - 1) {
                 currentQuestionIndex++;
                 displayQuestion(currentQuestionIndex);
+                updateQuestionCounter();
             }
         });
 
@@ -74,6 +82,7 @@ public class QuizApp extends Application {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
                 displayQuestion(currentQuestionIndex);
+                updateQuestionCounter();
             }
         });
 
@@ -105,5 +114,11 @@ public class QuizApp extends Application {
     private void displayQuestion(int index) {
         questionSection.getChildren().clear();
         questionSection.getChildren().add(questions.get(index).getQuestionPane());
+    }
+
+    private void updateQuestionCounter() {
+        int totalQuestions = questions.size();
+        int currentQuestionNumber = currentQuestionIndex + 1;
+        questionCounterLabel.setText("Question " + currentQuestionNumber + " / " + totalQuestions);
     }
 }
