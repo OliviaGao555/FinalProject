@@ -132,6 +132,10 @@ public class QuizApp extends Application {
         questionCounterLabel.setText("Question " + currentQuestionNumber + " / " + totalQuestions);
     }
 
+    /**
+     * Forms a type of multiple choice question about wind on ocean.
+     * @return ret A String ArrayList of a few Strings needed to create this multiple choice question.
+     */
     private ArrayList<String> multiChoiWind() {
         double randomW = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,10.00)).replace(",","."));
         double randomS = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(0.10,5.00)).replace(",","."));
@@ -155,6 +159,11 @@ public class QuizApp extends Application {
         return ret;
     }
 
+    /**
+     * Shuffles the options of a multiple choice question in random orders.
+     * @param options A String Array of options, in a non-random order.
+     * @return shuffleOptions A String Array of options, in shuffled order.
+     */
     private String[] shuffleOptions(String[] options) {
         List<String> shuffle = Arrays.asList(options);
         Collections.shuffle(shuffle);
