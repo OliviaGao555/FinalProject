@@ -11,10 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class QuizApp extends Application {
@@ -100,14 +97,25 @@ public class QuizApp extends Application {
         questions = new ArrayList<>();
 
         //Question 1
-        ArrayList<String> multi = multiChoiWind();
-        String answer = multi.get(0);
-        String randomAnswer1 = multi.get(1);
-        String randomAnswer2 = multi.get(2);
-        String randomAnswer3 = multi.get(3);
-        String questionText1 = multi.get(4);
-        String[] options = {answer, randomAnswer1, randomAnswer2, randomAnswer3};
-        questions.add(new MultipleChoiceQuestion(questionText1, options, answer));
+        ArrayList<String> multi1 = multiChoiWind();
+        String answer1 = multi1.get(0);
+        String randomAnswer11 = multi1.get(1);
+        String randomAnswer12 = multi1.get(2);
+        String randomAnswer13 = multi1.get(3);
+        String questionText1 = multi1.get(4);
+        String[] options1 = {answer1, randomAnswer11, randomAnswer12, randomAnswer13};
+        String[] shuffledOptions1 = shuffleOptions(options1);
+        questions.add(new MultipleChoiceQuestion(questionText1, shuffledOptions1, answer1));
+
+        ArrayList<String> multi2 = multiChoiWind();
+        String answer2 = multi2.get(0);
+        String randomAnswer21 = multi2.get(1);
+        String randomAnswer22 = multi2.get(2);
+        String randomAnswer23 = multi2.get(3);
+        String questionText2 = multi2.get(4);
+        String[] options2 = {answer2, randomAnswer21, randomAnswer22, randomAnswer23};
+        String[] shuffledOptions2 = shuffleOptions(options2);
+        questions.add(new MultipleChoiceQuestion(questionText2, shuffledOptions2, answer2));
 
         // Shuffle the list to randomize the question order
         Collections.shuffle(questions);
@@ -124,7 +132,7 @@ public class QuizApp extends Application {
         questionCounterLabel.setText("Question " + currentQuestionNumber + " / " + totalQuestions);
     }
 
-    public ArrayList<String> multiChoiWind() {
+    private ArrayList<String> multiChoiWind() {
         double randomW = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,10.00)).replace(",","."));
         double randomS = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(0.10,5.00)).replace(",","."));
         double wave = randomW;
@@ -145,5 +153,15 @@ public class QuizApp extends Application {
         ret.add(Double.toString(randomAnswer3));
         ret.add(questionText);
         return ret;
+    }
+
+    private String[] shuffleOptions(String[] options) {
+        List<String> shuffle = Arrays.asList(options);
+        Collections.shuffle(shuffle);
+        String[] shuffledOptions = new String[shuffle.size()];
+        for (int i = 0; i < shuffle.size(); i++) {
+            shuffledOptions[i] = shuffle.get(i);
+        }
+        return shuffledOptions;
     }
 }
