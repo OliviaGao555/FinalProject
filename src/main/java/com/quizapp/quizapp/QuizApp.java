@@ -10,16 +10,19 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class QuizApp extends Application {
 
     private BorderPane root;
     private VBox commonSection;
     private Pane questionSection;
-    private List<Question> questions;
+    public List<Question> questions;
     private int currentQuestionIndex = 0;
     private Label questionCounterLabel;
 
@@ -96,16 +99,15 @@ public class QuizApp extends Application {
     private void initializeQuestions() {
         questions = new ArrayList<>();
 
-        // Create multiple questions
-        String questionText1 = "What is the capital of France?";
-        String[] options1 = {"Berlin", "Madrid", "Paris", "Rome"};
-        String correctAnswer1 = "Paris";
-        questions.add(new MultipleChoiceQuestion(questionText1, options1, correctAnswer1));
-
-        String questionText2 = "Which planet is known as the Red Planet?";
-        String[] options2 = {"Earth", "Mars", "Jupiter", "Saturn"};
-        String correctAnswer2 = "Mars";
-        questions.add(new MultipleChoiceQuestion(questionText2, options2, correctAnswer2));
+        //Question 1
+        ArrayList<String> multi = multiChoiWind();
+        String answer = multi.get(0);
+        String randomAnswer1 = multi.get(1);
+        String randomAnswer2 = multi.get(2);
+        String randomAnswer3 = multi.get(3);
+        String questionText1 = multi.get(4);
+        String[] options = {answer, randomAnswer1, randomAnswer2, randomAnswer3};
+        questions.add(new MultipleChoiceQuestion(questionText1, options, answer));
 
         // Shuffle the list to randomize the question order
         Collections.shuffle(questions);
@@ -120,5 +122,28 @@ public class QuizApp extends Application {
         int totalQuestions = questions.size();
         int currentQuestionNumber = currentQuestionIndex + 1;
         questionCounterLabel.setText("Question " + currentQuestionNumber + " / " + totalQuestions);
+    }
+
+    public ArrayList<String> multiChoiWind() {
+        double randomW = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,10.00)).replace(",","."));
+        double randomS = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(0.10,5.00)).replace(",","."));
+        double wave = randomW;
+        double speed = randomS;
+        String questionText = String.format("Wind gusts create ripples on the ocean " +
+                "that have a wavelength of %,.2f cm and propagate at %,.2f m/s. What is their frequency?", wave, speed);
+
+        double correctAnswer = speed / (wave / 100);
+        double randomAnswer1 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,500.00)).replace(",","."));
+        double randomAnswer2 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,500.00)).replace(",","."));
+        double randomAnswer3 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,500.00)).replace(",","."));
+
+        String answer = String.format("%,.2f", correctAnswer);
+        ArrayList<String> ret = new ArrayList<>();
+        ret.add(answer);
+        ret.add(Double.toString(randomAnswer1));
+        ret.add(Double.toString(randomAnswer2));
+        ret.add(Double.toString(randomAnswer3));
+        ret.add(questionText);
+        return ret;
     }
 }

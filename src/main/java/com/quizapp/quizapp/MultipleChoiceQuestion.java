@@ -7,6 +7,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.text.DecimalFormat;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class MultipleChoiceQuestion implements Question {
 
     private String questionText;
