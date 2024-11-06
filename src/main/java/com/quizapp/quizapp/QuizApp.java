@@ -14,6 +14,9 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.quizapp.quizapp.QuestionGenerator.multiChoiWind;
+import static com.quizapp.quizapp.QuestionGenerator.shuffleOptions;
+
 public class QuizApp extends Application {
 
     private BorderPane root;
@@ -96,26 +99,11 @@ public class QuizApp extends Application {
     private void initializeQuestions() {
         questions = new ArrayList<>();
 
-        //Question 1
-        ArrayList<String> multi1 = multiChoiWind();
-        String answer1 = multi1.get(0);
-        String randomAnswer11 = multi1.get(1);
-        String randomAnswer12 = multi1.get(2);
-        String randomAnswer13 = multi1.get(3);
-        String questionText1 = multi1.get(4);
-        String[] options1 = {answer1, randomAnswer11, randomAnswer12, randomAnswer13};
-        String[] shuffledOptions1 = shuffleOptions(options1);
-        questions.add(new MultipleChoiceQuestion(questionText1, shuffledOptions1, answer1));
+        // Q1
+        QuestionGenerator.windQuestion(questions);
 
-        ArrayList<String> multi2 = multiChoiWind();
-        String answer2 = multi2.get(0);
-        String randomAnswer21 = multi2.get(1);
-        String randomAnswer22 = multi2.get(2);
-        String randomAnswer23 = multi2.get(3);
-        String questionText2 = multi2.get(4);
-        String[] options2 = {answer2, randomAnswer21, randomAnswer22, randomAnswer23};
-        String[] shuffledOptions2 = shuffleOptions(options2);
-        questions.add(new MultipleChoiceQuestion(questionText2, shuffledOptions2, answer2));
+        // Q2
+        QuestionGenerator.windQuestion(questions);
 
         // Shuffle the list to randomize the question order
         Collections.shuffle(questions);
@@ -130,47 +118,5 @@ public class QuizApp extends Application {
         int totalQuestions = questions.size();
         int currentQuestionNumber = currentQuestionIndex + 1;
         questionCounterLabel.setText("Question " + currentQuestionNumber + " / " + totalQuestions);
-    }
-
-    /**
-     * Forms a type of multiple choice question about wind on ocean.
-     * @return ret A String ArrayList of a few Strings needed to create this multiple choice question.
-     */
-    private ArrayList<String> multiChoiWind() {
-        double randomW = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,10.00)).replace(",","."));
-        double randomS = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(0.10,5.00)).replace(",","."));
-        double wave = randomW;
-        double speed = randomS;
-        String questionText = String.format("Wind gusts create ripples on the ocean " +
-                "that have a wavelength of %,.2f cm and propagate at %,.2f m/s. What is their frequency?", wave, speed);
-
-        double correctAnswer = speed / (wave / 100);
-        double randomAnswer1 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,500.00)).replace(",","."));
-        double randomAnswer2 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,500.00)).replace(",","."));
-        double randomAnswer3 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,500.00)).replace(",","."));
-
-        String answer = String.format("%,.2f", correctAnswer);
-        ArrayList<String> ret = new ArrayList<>();
-        ret.add(answer);
-        ret.add(Double.toString(randomAnswer1));
-        ret.add(Double.toString(randomAnswer2));
-        ret.add(Double.toString(randomAnswer3));
-        ret.add(questionText);
-        return ret;
-    }
-
-    /**
-     * Shuffles the options of a multiple choice question in random orders.
-     * @param options A String Array of options, in a non-random order.
-     * @return shuffleOptions A String Array of options, in shuffled order.
-     */
-    private String[] shuffleOptions(String[] options) {
-        List<String> shuffle = Arrays.asList(options);
-        Collections.shuffle(shuffle);
-        String[] shuffledOptions = new String[shuffle.size()];
-        for (int i = 0; i < shuffle.size(); i++) {
-            shuffledOptions[i] = shuffle.get(i);
-        }
-        return shuffledOptions;
     }
 }
