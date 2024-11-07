@@ -24,7 +24,7 @@ public class QuestionGenerator {
         String questionText = multiChoiceData.get(4);
 
         // Add the question to the list
-        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, correctAnswer));
+        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, correctAnswer, "Look at your text book!"));
     }
     /**
      * Forms a type of multiple choice question about wind on ocean.

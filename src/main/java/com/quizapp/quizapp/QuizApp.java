@@ -89,6 +89,11 @@ public class QuizApp extends Application {
             }
         });
 
+        helpButton.setOnAction(e -> {
+            Question currentQuestion = questions.get(currentQuestionIndex);
+            currentQuestion.showHint(); // Display the hint in the resultLabel
+        });
+
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Quiz App");
@@ -104,6 +109,13 @@ public class QuizApp extends Application {
 
         // Q2
         QuestionGenerator.windQuestion(questions);
+
+        // example to show how to add short answer question
+        questions.add(new ShortAnswerQuestion(
+                List.of("What is the capital of France?", "Largest planet?", "H2O is the chemical formula for?"),
+                List.of("Paris", "Jupiter", "Water"),
+                "Some hint"
+        ));
 
         // Shuffle the list to randomize the question order
         Collections.shuffle(questions);

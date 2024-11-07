@@ -6,4 +6,5 @@ public interface Question {
     Pane getQuestionPane();
     public boolean isAnswerCorrect();
     public void showResult(boolean isCorrect);
+    public void showHint();
 }
