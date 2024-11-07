@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class QuestionGenerator {
-
+    /**
+     * Adds a wind multiple choice question into the questions that will be displayed to the user.
+     * @param questions the ArrayList of all questions.
+     */
     public static void windQuestion(List<Question> questions) {
         ArrayList<String> multiChoiceData = multiChoiWind();
         String correctAnswer = multiChoiceData.get(0);
@@ -18,14 +21,13 @@ public class QuestionGenerator {
                 multiChoiceData.get(2),
                 multiChoiceData.get(3)
         };
-
         // Shuffle the options
         String[] shuffledOptions = shuffleOptions(options);
         String questionText = multiChoiceData.get(4);
-
         // Add the question to the list
-        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, correctAnswer, "Look at your text book!"));
+        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, correctAnswer, "hint"));
     }
+
     /**
      * Forms a type of multiple choice question about wind on ocean.
      * @return ret A String ArrayList of a few Strings needed to create this multiple choice question.
@@ -37,12 +39,10 @@ public class QuestionGenerator {
         double speed = randomS;
         String questionText = String.format("Wind gusts create ripples on the ocean " +
                 "that have a wavelength of %,.2f cm and propagate at %,.2f m/s. What is their frequency?", wave, speed);
-
         double correctAnswer = speed / (wave / 100);
         double randomAnswer1 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,500.00)).replace(",","."));
         double randomAnswer2 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,500.00)).replace(",","."));
         double randomAnswer3 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,500.00)).replace(",","."));
-
         String answer = String.format("%,.2f", correctAnswer);
         ArrayList<String> ret = new ArrayList<>();
         ret.add(answer);

@@ -3,19 +3,12 @@ package com.quizapp.quizapp;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.text.DecimalFormat;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
-
-import static com.quizapp.quizapp.QuestionGenerator.multiChoiWind;
-import static com.quizapp.quizapp.QuestionGenerator.shuffleOptions;
 
 public class QuizApp extends Application {
 

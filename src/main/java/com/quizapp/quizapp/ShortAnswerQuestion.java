@@ -27,7 +27,6 @@ public class ShortAnswerQuestion implements Question {
     public Pane getQuestionPane() {
         VBox questionPane = new VBox(10);
         questionPane.setPadding(new Insets(10));
-
         // Add each question text and corresponding input box
         for (String questionText : questionTexts) {
             Label questionLabel = new Label(questionText);
@@ -37,11 +36,9 @@ public class ShortAnswerQuestion implements Question {
 
             questionPane.getChildren().addAll(questionLabel, answerInput);
         }
-
         // Initialize the result label and add it to the pane
         resultLabel = new Label("");
         questionPane.getChildren().add(resultLabel);
-
         return questionPane;
     }
 
