@@ -14,13 +14,13 @@ public class ShortAnswerQuestion implements Question {
     private List<String> correctAnswers;
     private List<TextField> answerInputs; // Input fields for each question
     private Label resultLabel;
-    private String hint;
+    private String help;
 
-    public ShortAnswerQuestion(List<String> questionTexts, List<String> correctAnswers, String hint) {
+    public ShortAnswerQuestion(List<String> questionTexts, List<String> correctAnswers, String help) {
         this.questionTexts = new ArrayList<>(questionTexts);
         this.correctAnswers = new ArrayList<>(correctAnswers);
         this.answerInputs = new ArrayList<>();
-        this.hint = hint;
+        this.help = help;
     }
 
     @Override
@@ -32,6 +32,7 @@ public class ShortAnswerQuestion implements Question {
             Label questionLabel = new Label(questionText);
             TextField answerInput = new TextField();
             answerInput.setPromptText("Type your answer here...");
+            answerInput.getStyleClass().add("custom-textfield");
             answerInputs.add(answerInput); // Keep track of input fields
 
             questionPane.getChildren().addAll(questionLabel, answerInput);
@@ -64,8 +65,9 @@ public class ShortAnswerQuestion implements Question {
         }
     }
 
-    public void showHint() {
-        resultLabel.setText(hint);
-        resultLabel.setStyle("-fx-text-fill: blue; -fx-font-style: italic;");
+    @Override
+    public void showHelp() {
+        resultLabel.setText(help);
+        resultLabel.setStyle("-fx-text-fill: grey; -fx-font-style: italic;");
     }
 }

@@ -19,7 +19,6 @@ public class QuizApp extends Application {
     private int currentQuestionIndex = 0;
     private Label questionCounterLabel;
 
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -31,9 +30,13 @@ public class QuizApp extends Application {
         // Set up the common section with buttons
         commonSection = new VBox(10);
         Button submitButton = new Button("Submit");
+        submitButton.getStyleClass().add("custom-button");
         Button helpButton = new Button("Help");
+        helpButton.getStyleClass().add("custom-button");
         Button previousButton = new Button("Previous Question");
+        previousButton.getStyleClass().add("custom-button");
         Button nextButton = new Button("Next Question");
+        nextButton.getStyleClass().add("custom-button");
         HBox hButtons = new HBox(20, submitButton, helpButton, previousButton, nextButton);
 
         questionCounterLabel = new Label();
@@ -43,12 +46,8 @@ public class QuizApp extends Application {
 
         // Set up the question section
         questionSection = new Pane();
-        questionSection.setBorder(new Border(new BorderStroke(
-                Color.BLACK,
-                BorderStrokeStyle.SOLID,
-                CornerRadii.EMPTY,
-                new BorderWidths(3)
-        )));
+        questionSection.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,
+                CornerRadii.EMPTY, new BorderWidths(3))));
         questionSection.setPadding(new Insets(10));
         root.setCenter(questionSection);
 
@@ -84,10 +83,11 @@ public class QuizApp extends Application {
 
         helpButton.setOnAction(e -> {
             Question currentQuestion = questions.get(currentQuestionIndex);
-            currentQuestion.showHint(); // Display the hint in the resultLabel
+            currentQuestion.showHelp(); // Display the hint in the resultLabel
         });
 
         Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add("style.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("Quiz App");
         primaryStage.show();

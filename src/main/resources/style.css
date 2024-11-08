@@ -1,0 +1,47 @@
+/* Style Scene */
+.root {
+    -fx-background-color: white;
+}
+
+/* Style RadioButtons */
+.custom-radio .radio {
+    -fx-background-color: transparent;
+    -fx-border-color: black;
+    -fx-border-radius: 100%;
+    -fx-background-radius: 100%;
+    -fx-background-insets: 0;
+}
+.custom-radio:selected .radio .dot {
+    -fx-background-color: black;
+    -fx-background-insets: 0;
+}
+.custom-rightRadio .radio {
+    -fx-background-color: #addea6;
+}
+.custom-wrongRadio .radio {
+    -fx-background-color: #dea6a6;
+}
+
+/* Style TextFields */
+.custom-textfield {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+    -fx-prompt-text-fill: #addea6;
+    -fx-border-color: black;
+}
+.custom-rightTextfield {
+    -fx-background-color: #addea6;
+}
+.custom-wrongTextfield {
+    -fx-background-color: #dea6a6;
+}
+
+/* Style Buttons */
+.custom-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+    -fx-border-color: black;
+}
+.custom-button:pressed {
+    -fx-background-color: #addea6;
+}

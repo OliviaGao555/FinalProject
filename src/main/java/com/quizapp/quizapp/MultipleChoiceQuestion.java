@@ -17,13 +17,13 @@ public class MultipleChoiceQuestion implements Question {
     private String correctAnswer;
     private ToggleGroup optionsGroup;
     private Label resultLabel; // Label to show the result
-    private String hint;
+    private String help;
 
-    public MultipleChoiceQuestion(String questionText, String[] options, String correctAnswer, String hint) {
+    public MultipleChoiceQuestion(String questionText, String[] options, String correctAnswer, String help) {
         this.questionText = questionText;
         this.options = options;
         this.correctAnswer = correctAnswer;
-        this.hint = hint;
+        this.help = help;
     }
 
     @Override
@@ -39,6 +39,7 @@ public class MultipleChoiceQuestion implements Question {
         for(String option: this.options) {
             RadioButton optionButton = new RadioButton(option);
             optionButton.setToggleGroup(optionsGroup);
+            optionButton.getStyleClass().add("custom-radio");
             questionPane.getChildren().add(optionButton);
         }
 
@@ -60,18 +61,18 @@ public class MultipleChoiceQuestion implements Question {
 
     public void showResult(boolean isCorrect) {
         if (isCorrect) {
-            resultLabel.setText("Correct Answer!");
-            resultLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+            RadioButton selectedOption = (RadioButton) optionsGroup.getSelectedToggle();
+            selectedOption.getStyleClass().add("custom-rightRadio");
         } else {
-            resultLabel.setText("Incorrect Answer. Try Again!");
-            resultLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+            RadioButton selectedOption = (RadioButton) optionsGroup.getSelectedToggle();
+            selectedOption.getStyleClass().add("custom-wrongRadio");
         }
     }
 
     @Override
     // Show hint in the resultLabel
-    public void showHint() {
-        resultLabel.setText(hint);
-        resultLabel.setStyle("-fx-text-fill: blue; -fx-font-style: italic;");
+    public void showHelp() {
+        resultLabel.setText(help);
+        resultLabel.setStyle("-fx-text-fill: green; -fx-font-style: italic;");
     }
 }

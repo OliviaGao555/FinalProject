@@ -24,8 +24,9 @@ public class QuestionGenerator {
         // Shuffle the options
         String[] shuffledOptions = shuffleOptions(options);
         String questionText = multiChoiceData.get(4);
+        String help = multiChoiceData.get(5);
         // Add the question to the list
-        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, correctAnswer, "hint"));
+        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, correctAnswer, help));
     }
 
     /**
@@ -44,12 +45,20 @@ public class QuestionGenerator {
         double randomAnswer2 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,500.00)).replace(",","."));
         double randomAnswer3 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,500.00)).replace(",","."));
         String answer = String.format("%,.2f", correctAnswer);
+        String help = String.format("The frequency of a wave can be calculated using the formula:\n" + "f = v/λ\n" +
+                "Where: f is the frequency, v is the velocity of the wave, and λ is the wavelength of the wave.\n\n" +
+                "Given that the velocity (v) of the wave is %,.2f m/s and the wavelength (λ) is %,.2f cm, " +
+                "we can substitute these values into the formula to find the frequency:\n" +
+                "f = (%,.2f m/s)/(%,.2f cm)\n" +
+                "Don't forget to convert the unit of the wavelength! (100cm = 1m)\n\n" +
+                "So, the frequency of the ripples on the ocean is %,.2f Hz.", speed, wave, speed, wave, correctAnswer);
         ArrayList<String> ret = new ArrayList<>();
-        ret.add(answer);
-        ret.add(Double.toString(randomAnswer1));
-        ret.add(Double.toString(randomAnswer2));
-        ret.add(Double.toString(randomAnswer3));
+        ret.add(answer + " Hz");
+        ret.add(randomAnswer1 + " Hz");
+        ret.add(randomAnswer2 + " Hz");
+        ret.add(randomAnswer3 + " Hz");
         ret.add(questionText);
+        ret.add(help);
         return ret;
     }
 
