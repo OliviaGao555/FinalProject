@@ -38,9 +38,9 @@
 
 /* Style Buttons */
 .custom-button {
-    -fx-background-color: transparent;
-    -fx-text-fill: black;
-    -fx-border-color: black;
+    -fx-background-color: #00a5e0;
+    -fx-text-fill: white;
+    -fx-background-radius: 50;
 }
 .custom-button:pressed {
     -fx-background-color: #addea6;

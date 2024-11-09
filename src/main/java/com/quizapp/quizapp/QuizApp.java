@@ -38,6 +38,7 @@ public class QuizApp extends Application {
         Button nextButton = new Button("Next Question");
         nextButton.getStyleClass().add("custom-button");
         HBox hButtons = new HBox(20, submitButton, helpButton, previousButton, nextButton);
+        hButtons.setPadding(new Insets(10));
 
         questionCounterLabel = new Label();
 
