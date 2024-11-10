@@ -18,15 +18,15 @@ public class QuizApp extends Application {
     public List<Question> questions;
     private int currentQuestionIndex = 0;
     private Label questionCounterLabel;
-
+    private int[] preserveStateArray = new int[10000];
     public static void main(String[] args) {
         launch(args);
     }
+    private Label alreadyAnsweredLabel;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         root = new BorderPane();
-
         // Set up the common section with buttons
         commonSection = new VBox(10);
         Button submitButton = new Button("Submit");
@@ -39,10 +39,11 @@ public class QuizApp extends Application {
         nextButton.getStyleClass().add("custom-button");
         HBox hButtons = new HBox(20, submitButton, helpButton, previousButton, nextButton);
         hButtons.setPadding(new Insets(10));
-
         questionCounterLabel = new Label();
+        alreadyAnsweredLabel = new Label("");
 
-        commonSection.getChildren().addAll(hButtons, questionCounterLabel);
+        commonSection.getChildren().addAll(hButtons, questionCounterLabel, alreadyAnsweredLabel);
+        commonSection.setPrefHeight(100);
         root.setBottom(commonSection);
 
         // Set up the question section
@@ -64,6 +65,11 @@ public class QuizApp extends Application {
             Question currentQuestion = questions.get(currentQuestionIndex);
             boolean isCorrect = currentQuestion.isAnswerCorrect();
             currentQuestion.showResult(isCorrect); // Show the result in the question section
+            if (isCorrect) {
+                preserveStateArray[currentQuestionIndex] = 1;
+            } else {
+                preserveStateArray[currentQuestionIndex] = 0;
+            }
         });
 
         nextButton.setOnAction(e -> {
@@ -116,8 +122,17 @@ public class QuizApp extends Application {
     }
 
     private void displayQuestion(int index) {
-        questionSection.getChildren().clear();
-        questionSection.getChildren().add(questions.get(index).getQuestionPane());
+        if (preserveStateArray[index] == 1) {
+            questionSection.getChildren().clear();
+            questionSection.getChildren().add(questions.get(index).getQuestionPane());
+            alreadyAnsweredLabel.setText("You have already answered this question correctly!");
+            alreadyAnsweredLabel.setStyle("-fx-text-fill: green; -fx-font-size: 20; -fx-font-weight: bold;");
+            alreadyAnsweredLabel.setVisible(true);
+        } else {
+            questionSection.getChildren().clear();
+            questionSection.getChildren().add(questions.get(index).getQuestionPane());
+            alreadyAnsweredLabel.setVisible(false);
+        }
     }
 
     private void updateQuestionCounter() {

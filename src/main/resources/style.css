@@ -39,6 +39,7 @@
 /* Style Buttons */
 .custom-button {
     -fx-background-color: #00a5e0;
+    -fx-font-family: "Comic Sans MS";
     -fx-text-fill: white;
     -fx-background-radius: 50;
 }
