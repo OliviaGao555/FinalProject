@@ -34,6 +34,8 @@ public class QuestionGenerator {
                 "f = (%,.2f m/s)/(%,.2f cm)\n" +
                 "Don't forget to convert the unit of the wavelength! (100cm = 1m)\n\n" +
                 "So, the frequency of the ripples on the ocean is %,.2f Hz.", speed, wave, speed, wave, correctAnswer);
+        // Set up hint.
+        String hint = "Think about the formula:\nf = v/λ";
         // Set up the return value for this method, including all needed values to create a wind question.
         ArrayList<String> ret = new ArrayList<>();
         ret.add(answer + " Hz");
@@ -42,6 +44,7 @@ public class QuestionGenerator {
         ret.add(randomAnswer3 + " Hz");
         ret.add(questionText);
         ret.add(help);
+        ret.add(hint);
         return ret;
     }
 
@@ -56,6 +59,7 @@ public class QuestionGenerator {
         String correctAnswer = multiChoiceData.get(0);
         String questionText = multiChoiceData.get(4);
         String help = multiChoiceData.get(5);
+        String hint = multiChoiceData.get(6);
         String[] options = {
                 multiChoiceData.get(0),
                 multiChoiceData.get(1),
@@ -65,7 +69,7 @@ public class QuestionGenerator {
         // Shuffle the options.
         String[] shuffledOptions = shuffleOptions(options);
         // Add the question to the list.
-        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, correctAnswer, help));
+        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, correctAnswer, help, hint));
     }
 
     /**
@@ -102,11 +106,14 @@ public class QuestionGenerator {
         // Set up each value needed to create the terms question.
         List<String> question = shuffledQAndA.get(0);
         List<String> correctAnswer = shuffledQAndA.get(1);
-        String help = "- The maximum displacement from equilibrium is often denoted by the letter 'A'.\n" +
+        String help = "The maximum displacement of an object from its equilibrium position in simple harmonic motion: Amplitude\n" +
+                "The number of oscillations per unit time: Frequency\n" +
+                "The time to complete a cycle: Period";
+        String hint = "- The maximum displacement from equilibrium is often denoted by the letter 'A'.\n" +
                 "- The number of oscillations per second is measured in Hertz (Hz).\n" +
                 "- The time to complete one full cycle of motion is the inverse of frequency.";
         // Add the question to the list.
-        questions.add(new ShortAnswerQuestion(question, correctAnswer, help));
+        questions.add(new ShortAnswerQuestion(question, correctAnswer, help, hint));
     }
 
     /**
@@ -149,23 +156,27 @@ public class QuestionGenerator {
                 "Where: m is the mass, Vmax is the maximum speed of the block, k is the spring constant and Xmax is the maximum extension.\n\n"
                 + "Given that the mass (m) of the block is %,.2f kg, its spring constant (k) is %,.2f N/m and maximum extension (X) is %,.2f cm, "
                 + "we can substitute these values into the formula to find the maximum speed:\n" +
-                "Vmax = \u221A((%,.2f N/m)/(%,.2f kg)) * (%,.2f cm)\u00B2\n" +
+                "Vmax = \u221A(((%,.2f N/m)/(%,.2f kg)) * (%,.2f cm)\u00B2)\n" +
                 "Don't forget to convert the unit of the extension distance! (100cm = 1m)\n\n" +
                 "So, the maximum speed of the block is %,.2f m/s.\n\n\n" +
+
                 "b) The total energy of the spring is given by:\n" + "E = \u00BDkX\u00B2max\n" +
                 "Substitute given values into the formula to find the total energy of the spring:\n" +
-                "E = \u00BD(%,.2f N/m) * (%,.2f cm)\u00B2 = \n J" +
+                "E = \u00BD(%,.2f N/m) * (%,.2f cm)\u00B2 = %,.2f J\n" +
                 "Don't forget to convert the unit of the extension distance! (100cm = 1m)\n" +
                 "The potential energy at %,.2f cm is:\n" + "PE = \u00BD(%,.2f N/m) * (%,.2f cm)\u00B2 = %,.2f J\n" +
                 "The kinetic energy is given by:\n" + "KE = E - PE\nKE = %,.2f - %,.2f = %,.2f J" +
                 "The speed when the extension is %,.2f is:\n" + "V = \u221A((%,.2f J) * 2 / (%,.2f kg))\n\n" +
                 "So, the speed of the block when the extension is %,.2f cm is %,.2f m/s.\n\n\n" +
+
                 "c) Here, the kinetic energy is equal to the potential energy. As the E = %,.2f J:\n" +
                 "EK = EP = \u00BDE = \u00BD%,.2f J = %,.2f J\n" +
                 "The value of position is:\n" + "X = \u221A((%,.2f J) * 2 / (%,.2f N/m))\n\n" +
-                "So, the kinetic energy is equal to the potential energy when X = %,.2f m.", mass, spring, distance, spring, mass, distance, correctAnswerA, spring, distance, eTot, distance/2, spring, distance/2, potE, eTot, potE, eTot-potE, distance/2, eTot-potE, mass, distance/2, correctAnswerB, eTot, eTot/2, eTot/2, spring, correctAnswerC);
+                "So, the kinetic energy is equal to the potential energy when X = %,.2f m.", mass, spring, distance, spring, mass, distance, correctAnswerA, spring, distance, eTot, distance/2, spring, distance/2, potE, eTot, potE, eTot-potE, distance/2, eTot-potE, mass, distance/2, correctAnswerB, eTot, eTot, eTot/2, eTot/2, spring, correctAnswerC);
+        String hint = "Here are some useful formulas:\n" +
+                "KE = \u00BDmV\u00B2\nPE = \u00BDkX\u00B2\nE = EK + EP";
         // Add the question to the list.
-        questions.add(new ShortAnswerQuestion(question, correctAnswer, help));
+        questions.add(new ShortAnswerQuestion(question, correctAnswer, help, hint));
     }
 
     /**

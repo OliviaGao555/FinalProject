@@ -167,6 +167,6 @@ public class QuizApp extends Application {
     // Method to display the hint when the timer runs out
     private void showHintOnTimeout() {
         Question currentQuestion = questions.get(currentQuestionIndex);
-        currentQuestion.showHelp();
+        currentQuestion.showHint();
     }
 }

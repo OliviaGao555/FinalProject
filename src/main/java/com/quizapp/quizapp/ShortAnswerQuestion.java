@@ -2,8 +2,8 @@ package com.quizapp.quizapp;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +17,11 @@ public class ShortAnswerQuestion implements Question {
     private Label resultLabel;
     private Label helpLabel;
     private String help;
+    private String hint;
     private boolean lastAnswerWasCorrect = false;
 
     // Constructor.
-    public ShortAnswerQuestion(List<String> questionTexts, List<String> correctAnswers, String help) {
+    public ShortAnswerQuestion(List<String> questionTexts, List<String> correctAnswers, String help, String hint) {
         this.questionTexts = new ArrayList<>(questionTexts);
         this.correctAnswers = new ArrayList<>(correctAnswers);
         this.answerInputs = new ArrayList<>();
@@ -29,6 +30,7 @@ public class ShortAnswerQuestion implements Question {
             userCorrectAnswers.add(null);   // Initialize with null
         }
         this.help = help;
+        this.hint = hint;
     }
 
     @Override
@@ -64,7 +66,12 @@ public class ShortAnswerQuestion implements Question {
         resultLabel = new Label("");
         questionV.getChildren().add(resultLabel);
         helpLabel = new Label("");
-        questionV.getChildren().add(helpLabel);
+        helpLabel.setPadding(new Insets(10));
+        helpLabel.setMaxWidth(845);
+        ScrollPane scrollPane = new ScrollPane(helpLabel);
+        scrollPane.setMaxHeight(200);
+        scrollPane.setMaxWidth(865);
+        questionV.getChildren().add(scrollPane);
 
         // If all answers were previously correct, show the result as correct
         if (allPreviouslyCorrect && !userCorrectAnswers.contains(null)) { // Check if all answers were correct
@@ -114,7 +121,18 @@ public class ShortAnswerQuestion implements Question {
     @Override
     public void showHelp() {
         helpLabel.setText(help);
+        helpLabel.setWrapText(true);
         helpLabel.setStyle("-fx-text-fill: green; -fx-font-style: italic;");
+    }
+
+    // See: Question Interface.
+    @Override
+    public void showHint() {
+        if (!helpLabel.getText().equals(help)) {
+            helpLabel.setText(hint);
+            helpLabel.setWrapText(true);
+            helpLabel.setStyle("-fx-text-fill: green; -fx-font-style: italic;");
+        }
     }
 
     // See: Question Interface.

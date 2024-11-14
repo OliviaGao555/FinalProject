@@ -11,6 +11,8 @@ public interface Question {
     void showResult(boolean isCorrect);
     // Shows the steps and answer of the question.
     void showHelp();
+    // Shows the hint for the question.
+    void showHint();
     // False: Show timer. True: Hide timer.
     boolean wasAnsweredCorrectly();
 }
