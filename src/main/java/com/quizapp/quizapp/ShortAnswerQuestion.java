@@ -57,10 +57,16 @@ public class ShortAnswerQuestion implements Question {
     public void showResult(boolean isCorrect) {
         if (isCorrect) {
             resultLabel.setText("All answers are correct!");
-            resultLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+            resultLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold");
+            for (int i = 0; i < answerInputs.size(); i++) {
+                answerInputs.get(i).getStyleClass().add("custom-right-text-field");
+            }
         } else {
             resultLabel.setText("One or more answers are incorrect. Try again!");
-            resultLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+            resultLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold");
+            for (int i = 0; i < answerInputs.size(); i++) {
+                answerInputs.get(i).getStyleClass().add("custom-wrong-text-field");
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 /* Style Scene */
 .root {
     -fx-background-color: white;
+    -fx-font-size: 14;
 }
 
 /* Style RadioButtons */
@@ -29,7 +30,6 @@
 /* Style TextFields */
 .text-field {
     -fx-background-color: transparent;
-    -fx-text-fill: black;
     -fx-prompt-text-fill: #addea6;
     -fx-border-color: black;
     -fx-border-width: 1.5;
@@ -45,7 +45,6 @@
 /* Style Buttons */
 .button {
     -fx-background-color: transparent;
-    -fx-text-fill: black;
     -fx-border-color: black;
     -fx-border-radius: 0;
     -fx-border-width: 1.5;

@@ -15,6 +15,7 @@ public class QuizApp extends Application {
     private BorderPane root;
     private VBox commonSection;
     private Pane questionSection;
+    private VBox centerSection;
     public List<Question> questions;
     private int currentQuestionIndex = 0;
     private Label questionCounterLabel;
@@ -27,27 +28,31 @@ public class QuizApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         root = new BorderPane();
-        // Set up the common section with buttons
-        commonSection = new VBox(10);
+        // Set up the common section with buttons\
         Button submitButton = new Button("Submit");
         Button helpButton = new Button("Help");
         Button previousButton = new Button("Previous Question");
         Button nextButton = new Button("Next Question");
         HBox hButtons = new HBox(20, submitButton, helpButton, previousButton, nextButton);
-        hButtons.setPadding(new Insets(10));
         questionCounterLabel = new Label();
         alreadyAnsweredLabel = new Label("");
 
-        commonSection.getChildren().addAll(hButtons, questionCounterLabel, alreadyAnsweredLabel);
-        commonSection.setPrefHeight(100);
+        commonSection = new VBox();
+        commonSection.getChildren().addAll(hButtons, questionCounterLabel);
+        commonSection.setPadding(new Insets(10));
+        commonSection.setSpacing(10);
         root.setBottom(commonSection);
+
+        centerSection = new VBox();
+        centerSection = new VBox(alreadyAnsweredLabel);
+        root.setCenter(centerSection);
 
         // Set up the question section
         questionSection = new Pane();
         questionSection.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,
                 CornerRadii.EMPTY, new BorderWidths(3))));
         questionSection.setPadding(new Insets(10));
-        root.setCenter(questionSection);
+        root.setTop(questionSection);
 
         // Initialize questions
         initializeQuestions();
@@ -135,7 +140,7 @@ public class QuizApp extends Application {
             questionSection.getChildren().clear();
             questionSection.getChildren().add(questions.get(index).getQuestionPane());
             alreadyAnsweredLabel.setText("You have already answered this question correctly!");
-            alreadyAnsweredLabel.setStyle("-fx-text-fill: green; -fx-font-size: 20; -fx-font-weight: bold;");
+            alreadyAnsweredLabel.setStyle("-fx-text-family: Verdana; -fx-text-fill: green; -fx-font-weight: bold;");
             alreadyAnsweredLabel.setVisible(true);
         } else {
             questionSection.getChildren().clear();
