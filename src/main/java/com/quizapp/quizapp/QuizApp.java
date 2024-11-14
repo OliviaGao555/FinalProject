@@ -105,18 +105,6 @@ public class QuizApp extends Application {
 
         // Q3.
         QuestionGenerator.termsQuestion(questions);
-//        questions.add(new ShortAnswerQuestion(
-//                List.of("What is the term for the maximum displacement of an object from its equilibrium position in simple harmonic motion?",
-//                        "What is the term for the number of oscillations per unit time",
-//                        "What is the term for the time to complete a cycle"),
-//                List.of("Amplitude",
-//                        "Frequency",
-//                        "Period"),
-//                "Hint:\n" +
-//                        "- The maximum displacement from equilibrium is often denoted by the letter 'A'.\n" +
-//                        "- The number of oscillations per second is measured in Hertz (Hz).\n" +
-//                        "- The time to complete one full cycle of motion is the inverse of frequency."
-//        ));
 
         // Shuffle the list to randomize the question order.
         Collections.shuffle(questions);

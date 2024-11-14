@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class QuestionGenerator {
+    //Multiple choices questions.
     /**
      * Forms a type of multiple choice question about wind on ocean.
      * @return ret A String ArrayList of a few Strings needed to create this multiple choice question.
@@ -67,28 +68,17 @@ public class QuestionGenerator {
         questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, correctAnswer, help));
     }
 
-    public static void termsQuestion(List<Question> questions) {
-        Map<String, String> terms = new HashMap<>();
-        terms.put("What is the term for the maximum displacement of an object from its equilibrium position in simple harmonic motion?", "Amplitude");
-        terms.put("What is the term for the number of oscillations per unit time?", "Frequency");
-        terms.put("What is the term for the time to complete a cycle?", "Period");
-        ArrayList<List<String>> shuffledQAndA = shuffleShorts(terms);
-        List<String> question = shuffledQAndA.get(0);
-        List<String> correctAnswer = shuffledQAndA.get(1);
-        String help = "- The maximum displacement from equilibrium is often denoted by the letter 'A'.\n" +
-                "- The number of oscillations per second is measured in Hertz (Hz).\n" +
-                "- The time to complete one full cycle of motion is the inverse of frequency.";
-        questions.add(new ShortAnswerQuestion(question, correctAnswer, help));
-    }
-
     /**
      * Shuffles the options of a multiple choice question in random orders.
      * @param options A String Array of options, in a non-random order.
      * @return shuffleOptions A String Array of options, in shuffled order.
      */
     public static String[] shuffleOptions(String[] options) {
+        // Put options to be shuffled in a List.
         List<String> shuffle = Arrays.asList(options);
+        // Use Collections to shuffle.
         Collections.shuffle(shuffle);
+        // Put shuffled options back to a String Array.
         String[] shuffledOptions = new String[shuffle.size()];
         for (int i = 0; i < shuffle.size(); i++) {
             shuffledOptions[i] = shuffle.get(i);
@@ -96,10 +86,40 @@ public class QuestionGenerator {
         return shuffledOptions;
     }
 
-    public static ArrayList<List<String>> shuffleShorts(Map<String, String> qAndA) {
-        List<Map.Entry<String, String>> shuffle = new ArrayList<>(qAndA.entrySet());
-        Collections.shuffle(shuffle);
+    // Short answer questions.
+    /**
+     * Adds a terms short answer question into the questions that will be displayed to the user.
+     * @param questions the ArrayList of all questions.
+     */
+    public static void termsQuestion(List<Question> questions) {
+        // Create a map so the questions and answers always stay connected.
+        Map<String, String> terms = new HashMap<>();
+        terms.put("What is the term for the maximum displacement of an object from its equilibrium position in simple harmonic motion?", "Amplitude");
+        terms.put("What is the term for the number of oscillations per unit time?", "Frequency");
+        terms.put("What is the term for the time to complete a cycle?", "Period");
+        // Shuffle the order of questions and answers.
+        ArrayList<List<String>> shuffledQAndA = shuffleShorts(terms);
+        // Set up each value needed to create the terms question.
+        List<String> question = shuffledQAndA.get(0);
+        List<String> correctAnswer = shuffledQAndA.get(1);
+        String help = "- The maximum displacement from equilibrium is often denoted by the letter 'A'.\n" +
+                "- The number of oscillations per second is measured in Hertz (Hz).\n" +
+                "- The time to complete one full cycle of motion is the inverse of frequency.";
+        // Add the question to the list.
+        questions.add(new ShortAnswerQuestion(question, correctAnswer, help));
+    }
 
+    /**
+     * Shuffles the questions of a short answer question in random orders.
+     * @param qAndA A String + String map of questions and answers, in a non-random order.
+     * @return shuffleQAndA A String List ArrayList of Lists of questions and answers, in shuffled order.
+     */
+    public static ArrayList<List<String>> shuffleShorts(Map<String, String> qAndA) {
+        // Put questions and answers to be shuffled in an ArrayList.
+        List<Map.Entry<String, String>> shuffle = new ArrayList<>(qAndA.entrySet());
+        // Use Collections to shuffle.
+        Collections.shuffle(shuffle);
+        // Put shuffled questions and answers in two corresponding String Lists.
         List<String> shuffledQ = new ArrayList<>();
         for (Map.Entry<String, String> shuffledQAndA : shuffle) {
             shuffledQ.add(shuffledQAndA.getKey());
@@ -108,6 +128,7 @@ public class QuestionGenerator {
         for (Map.Entry<String, String> shuffledQAndA : shuffle) {
             shuffledA.add(shuffledQAndA.getValue());
         }
+        // Gather the two Lists together in an ArrayList.
         ArrayList<List<String>> shuffledQAndA = new ArrayList<>();
         shuffledQAndA.add(shuffledQ);
         shuffledQAndA.add(shuffledA);
