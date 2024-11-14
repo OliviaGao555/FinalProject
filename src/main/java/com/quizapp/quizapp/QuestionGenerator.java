@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class QuestionGenerator {
-    //Multiple choices questions.
+    // Multiple choices questions.
     /**
      * Forms a type of multiple choice question about wind on ocean.
      * @return ret A String ArrayList of a few Strings needed to create this multiple choice question.

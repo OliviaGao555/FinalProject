@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MultipleChoiceQuestion implements Question {
-
+    // Variables.
     private String questionText;
     private String[] options;
     private String correctAnswer;
@@ -22,6 +22,7 @@ public class MultipleChoiceQuestion implements Question {
     private String savedSelectionText = null;
     private boolean lastAnswerWasCorrect = false;
 
+    // Constructor.
     public MultipleChoiceQuestion(String questionText, String[] options, String correctAnswer, String help) {
         this.questionText = questionText;
         this.options = options;
@@ -58,17 +59,18 @@ public class MultipleChoiceQuestion implements Question {
         return questionPane;
     }
 
+    // See: Question Interface.
     public boolean isAnswerCorrect() {
         RadioButton selectedOption = (RadioButton) optionsGroup.getSelectedToggle();
         if (selectedOption != null) {
-            // Save the selected option's text instead of the RadioButton reference
-            savedSelectionText = selectedOption.getText(); // Assume savedSelectionText is a String field
+            savedSelectionText = selectedOption.getText();   // For easier comparison.
             lastAnswerWasCorrect = savedSelectionText.equals(correctAnswer);
             return lastAnswerWasCorrect;
         }
         return false;
     }
 
+    // See: Question Interface.
     public void showResult(boolean isCorrect) {
         RadioButton selectedOption = (RadioButton) optionsGroup.getSelectedToggle();
         if (isCorrect) {
@@ -82,27 +84,29 @@ public class MultipleChoiceQuestion implements Question {
         }
     }
 
+    // See: Question Interface.
     @Override
-    // Show hint in the resultLabel
     public void showHelp() {
         helpLabel.setText(help);
         helpLabel.setStyle("-fx-text-fill: green; -fx-font-style: italic;");
     }
 
-    // Add a method to restore the saved selection
+    /**
+     * Restores a selection if the question was already answered correctly by user.
+     */
     private void restoreSelectionIfCorrect() {
         if (savedSelectionText != null && lastAnswerWasCorrect) {
             optionsGroup.getToggles().forEach(toggle -> {
                 RadioButton rb = (RadioButton) toggle;
                 if (rb.getText().equals(savedSelectionText)) {
                     rb.setSelected(true);
-                    // Optionally, apply the correct styling if needed
                     showResult(true);
                 }
             });
         }
     }
 
+    // See: Question Interface.
     @Override
     public boolean wasAnsweredCorrectly() {
         return this.lastAnswerWasCorrect;

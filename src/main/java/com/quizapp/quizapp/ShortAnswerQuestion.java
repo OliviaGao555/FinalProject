@@ -5,36 +5,37 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShortAnswerQuestion implements Question {
+    // Variables.
     private List<String> questionTexts;
     private List<String> correctAnswers;
-    private List<TextField> answerInputs; // Input fields for each question
-    private List<String> userCorrectAnswers; // To store correct answers entered by the user
+    private List<TextField> answerInputs;
+    private List<String> userCorrectAnswers;
     private Label resultLabel;
     private Label helpLabel;
     private String help;
     private boolean lastAnswerWasCorrect = false;
 
+    // Constructor.
     public ShortAnswerQuestion(List<String> questionTexts, List<String> correctAnswers, String help) {
         this.questionTexts = new ArrayList<>(questionTexts);
         this.correctAnswers = new ArrayList<>(correctAnswers);
         this.answerInputs = new ArrayList<>();
-        this.userCorrectAnswers = new ArrayList<>(correctAnswers.size()); // Initialize with the correct size, filled with nulls
+        this.userCorrectAnswers = new ArrayList<>(correctAnswers.size());   // Initialize with the correct size
         for (int i = 0; i < correctAnswers.size(); i++) {
-            userCorrectAnswers.add(null); // Initialize with nulls
+            userCorrectAnswers.add(null);   // Initialize with null
         }
         this.help = help;
     }
 
     @Override
-    public Pane getQuestionPane() {
-        VBox questionPane = new VBox(10);
-        questionPane.setPadding(new Insets(10));
-        answerInputs.clear(); // Clear previous inputs to avoid duplication
+    public VBox getQuestionPane() {
+        VBox questionV = new VBox(10);
+        questionV.setPadding(new Insets(10));
+        answerInputs.clear();   // Clear previous inputs to avoid duplication
         boolean allPreviouslyCorrect = true;
 
         // Add each question text and corresponding input box
@@ -53,23 +54,24 @@ public class ShortAnswerQuestion implements Question {
 
             answerInputs.add(answerInput); // Keep track of input fields
 
-            questionPane.getChildren().addAll(questionLabel, answerInput);
+            questionV.getChildren().addAll(questionLabel, answerInput);
         }
 
         // Initialize the result label and add it to the pane
         resultLabel = new Label("");
-        questionPane.getChildren().add(resultLabel);
+        questionV.getChildren().add(resultLabel);
         helpLabel = new Label("");
-        questionPane.getChildren().add(helpLabel);
+        questionV.getChildren().add(helpLabel);
 
         // If all answers were previously correct, show the result as correct
         if (allPreviouslyCorrect && !userCorrectAnswers.contains(null)) { // Check if all answers were correct
             showResult(true);
         }
 
-        return questionPane;
+        return questionV;
     }
 
+    // See: Question Interface.
     @Override
     public boolean isAnswerCorrect() {
         boolean allCorrect = true;
@@ -87,6 +89,7 @@ public class ShortAnswerQuestion implements Question {
         return allCorrect;
     }
 
+    // See: Question Interface.
     @Override
     public void showResult(boolean isCorrect) {
         if (isCorrect) {
@@ -104,12 +107,14 @@ public class ShortAnswerQuestion implements Question {
         }
     }
 
+    // See: Question Interface.
     @Override
     public void showHelp() {
         helpLabel.setText(help);
         helpLabel.setStyle("-fx-text-fill: green; -fx-font-style: italic;");
     }
 
+    // See: Question Interface.
     @Override
     public boolean wasAnsweredCorrectly() {
         return this.lastAnswerWasCorrect;
