@@ -16,9 +16,10 @@ public class MultipleChoiceQuestion implements Question {
     private String[] options;
     private String correctAnswer;
     private ToggleGroup optionsGroup;
-    private Label resultLabel; // Label to show the result
+    private Label resultLabel;
+    private Label helpLabel;
     private String help;
-    private String savedSelectionText = null; // Add this field to your class
+    private String savedSelectionText = null;
     private boolean lastAnswerWasCorrect = false;
 
     public MultipleChoiceQuestion(String questionText, String[] options, String correctAnswer, String help) {
@@ -45,9 +46,11 @@ public class MultipleChoiceQuestion implements Question {
             questionPane.getChildren().add(optionButton);
         }
 
-        // Initialize the result label and add it to the pane
+        // Initialize the help label and add it to the pane
         resultLabel = new Label("");
         questionPane.getChildren().add(resultLabel);
+        helpLabel = new Label("");
+        questionPane.getChildren().add(helpLabel);
 
         // Restore previous select if applicable
         this.restoreSelectionIfCorrect();
@@ -69,8 +72,12 @@ public class MultipleChoiceQuestion implements Question {
     public void showResult(boolean isCorrect) {
         RadioButton selectedOption = (RadioButton) optionsGroup.getSelectedToggle();
         if (isCorrect) {
+            resultLabel.setText("Your answer is correct!");
+            resultLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold");
             selectedOption.getStyleClass().add("custom-right-radio");
         } else {
+            resultLabel.setText("Your answer is incorrect. Try again!");
+            resultLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold");
             selectedOption.getStyleClass().add("custom-wrong-radio");
         }
     }
@@ -78,8 +85,8 @@ public class MultipleChoiceQuestion implements Question {
     @Override
     // Show hint in the resultLabel
     public void showHelp() {
-        resultLabel.setText(help);
-        resultLabel.setStyle("-fx-text-fill: green; -fx-font-style: italic;");
+        helpLabel.setText(help);
+        helpLabel.setStyle("-fx-text-fill: green; -fx-font-style: italic;");
     }
 
     // Add a method to restore the saved selection

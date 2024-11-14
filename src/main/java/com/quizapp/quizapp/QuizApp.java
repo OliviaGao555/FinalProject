@@ -1,34 +1,30 @@
 package com.quizapp.quizapp;
 
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class QuizApp extends Application {
-
+    //Variables, big components of the application.
     private BorderPane root;
     private VBox commonSection;
-    private Pane questionSection;
+    private GridPane questionSection;
+    //Variables, used to present questions.
     public List<Question> questions;
-    private int currentQuestionIndex = 0;
     private Label questionCounterLabel;
-
+    private int currentQuestionIndex = 0;
+    //Variables, used for the timer.
     private Timeline timer;
-    private int timeLimit = 5; // Set a time limit for each question (in seconds)
-    private Label timerLabel; // Label to display the countdown
+    private int timeLimit = 180;
+    private Label timerLabel;
 
     public static void main(String[] args) {
         launch(args);
@@ -36,21 +32,23 @@ public class QuizApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        //Set up the root.
         root = new BorderPane();
         // Set up the common section with buttons
-        commonSection = new VBox(10);
+        commonSection = new VBox();
         Button submitButton = new Button("Submit");
         Button helpButton = new Button("Help");
         Button previousButton = new Button("Previous Question");
         Button nextButton = new Button("Next Question");
         HBox hButtons = new HBox(20, submitButton, helpButton, previousButton, nextButton);
-        hButtons.setPadding(new Insets(10));
         questionCounterLabel = new Label();
         commonSection.getChildren().addAll(hButtons, questionCounterLabel);
+        commonSection.setSpacing(10);
+        commonSection.setPadding(new Insets(20));
 
         // Initialize timer label and add it to the common section
         timerLabel = new Label("Time left: " + timeLimit + " seconds");
-        timerLabel.setStyle("-fx-text-fill: red; -fx-font-size: 16;");
+        timerLabel.setStyle("-fx-text-fill: #addea6;");
         commonSection.getChildren().add(timerLabel);
 
         commonSection.setPrefHeight(100);
@@ -58,15 +56,12 @@ public class QuizApp extends Application {
         root.setBottom(commonSection);
 
         // Set up the question section
-        questionSection = new Pane();
-        questionSection.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,
-                CornerRadii.EMPTY, new BorderWidths(3))));
+        questionSection = new GridPane();
         questionSection.setPadding(new Insets(10));
         root.setCenter(questionSection);
 
         // Initialize questions
         initializeQuestions();
-        updateQuestionCounter();
 
         // Display the first question
         displayQuestion(currentQuestionIndex);
@@ -82,7 +77,6 @@ public class QuizApp extends Application {
             if (currentQuestionIndex < questions.size() - 1) {
                 currentQuestionIndex++;
                 displayQuestion(currentQuestionIndex);
-                updateQuestionCounter();
             }
         });
 
@@ -90,7 +84,6 @@ public class QuizApp extends Application {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
                 displayQuestion(currentQuestionIndex);
-                updateQuestionCounter();
             }
         });
 
@@ -99,7 +92,7 @@ public class QuizApp extends Application {
             currentQuestion.showHelp(); // Display the hint in the resultLabel
         });
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1132, 700);
         scene.getStylesheets().add("style.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("Quiz App");
@@ -143,19 +136,18 @@ public class QuizApp extends Application {
     private void displayQuestion(int index) {
         questionSection.getChildren().clear();
         Question currentQuestion = questions.get(index);
-        questionSection.getChildren().add(currentQuestion.getQuestionPane());
+        Label questionNumber = new Label();
+        int totalQuestions = questions.size();
+        questionNumber.setText(String.format("Question %d / %d", currentQuestionIndex + 1, totalQuestions));
+        questionNumber.setStyle("-fx-font-weight: bold");
+        questionSection.add(questionNumber, 0, 0);
+        questionSection.add(currentQuestion.getQuestionPane(), 0, 1);
 
         if (!currentQuestion.wasAnsweredCorrectly()) {
             startTimer();
         } else {
             stopTimer();
         }
-    }
-
-    private void updateQuestionCounter() {
-        int totalQuestions = questions.size();
-        int currentQuestionNumber = currentQuestionIndex + 1;
-        questionCounterLabel.setText("Question " + currentQuestionNumber + " / " + totalQuestions);
     }
 
     private void stopTimer() {

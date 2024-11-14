@@ -15,6 +15,7 @@ public class ShortAnswerQuestion implements Question {
     private List<TextField> answerInputs; // Input fields for each question
     private List<String> userCorrectAnswers; // To store correct answers entered by the user
     private Label resultLabel;
+    private Label helpLabel;
     private String help;
     private boolean lastAnswerWasCorrect = false;
 
@@ -58,6 +59,8 @@ public class ShortAnswerQuestion implements Question {
         // Initialize the result label and add it to the pane
         resultLabel = new Label("");
         questionPane.getChildren().add(resultLabel);
+        helpLabel = new Label("");
+        questionPane.getChildren().add(helpLabel);
 
         // If all answers were previously correct, show the result as correct
         if (allPreviouslyCorrect && !userCorrectAnswers.contains(null)) { // Check if all answers were correct
@@ -103,8 +106,8 @@ public class ShortAnswerQuestion implements Question {
 
     @Override
     public void showHelp() {
-        resultLabel.setText(help);
-        resultLabel.setStyle("-fx-text-fill: grey; -fx-font-style: italic;");
+        helpLabel.setText(help);
+        helpLabel.setStyle("-fx-text-fill: green; -fx-font-style: italic;");
     }
 
     @Override
