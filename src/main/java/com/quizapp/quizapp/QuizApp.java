@@ -106,6 +106,12 @@ public class QuizApp extends Application {
         // Q3.
         QuestionGenerator.termsQuestion(questions);
 
+        // Q4.
+        QuestionGenerator.slideQuestion(questions);
+
+        // Q5.
+        QuestionGenerator.slideQuestion(questions);
+
         // Shuffle the list to randomize the question order.
         Collections.shuffle(questions);
     }

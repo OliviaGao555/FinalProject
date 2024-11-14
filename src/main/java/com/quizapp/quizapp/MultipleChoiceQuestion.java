@@ -36,6 +36,8 @@ public class MultipleChoiceQuestion implements Question {
         questionPane.setPadding((new Insets(10)));
 
         Label questionLabel = new Label(this.questionText);
+        questionLabel.setMaxWidth(865);
+        questionLabel.setWrapText(true);
         questionPane.getChildren().add(questionLabel);
 
         // create radio buttons for each option

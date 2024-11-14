@@ -42,7 +42,10 @@ public class ShortAnswerQuestion implements Question {
         for (int i = 0; i < questionTexts.size(); i++) {
             String questionText = questionTexts.get(i);
             Label questionLabel = new Label(questionText);
+            questionLabel.setMaxWidth(865);
+            questionLabel.setWrapText(true);
             TextField answerInput = new TextField();
+            answerInput.setMaxWidth(865);
             answerInput.setPromptText("Type your answer here...");
 
             // Restore correct answer if exists

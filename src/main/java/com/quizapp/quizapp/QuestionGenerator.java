@@ -110,6 +110,65 @@ public class QuestionGenerator {
     }
 
     /**
+     * Adds a slide short answer question into the questions that will be displayed to the user.
+     * @param questions the ArrayList of all questions.
+     */
+    public static void slideQuestion(List<Question> questions) {
+        // Create random numbers for the three variables of the question.
+        double randomM = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(0.10,0.99)).replace(",","."));
+        double randomK = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(10.00,50.00)).replace(",","."));
+        double randomD = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(10.00,100.00)).replace(",","."));
+        // Choose three random values for the three variables.
+        double mass = randomM;
+        double spring = randomK;
+        double distance = randomD;
+        // Calculate answers for each question.
+        double dInM = distance / 100;
+        double eTot = 0.5 * spring * dInM * dInM;
+        double potE = 0.5 * spring * (dInM / 2) * (dInM / 2);
+        double correctAnswerA = Math.sqrt((spring / mass) * dInM * dInM);
+        String stringCorrectAnswerA = String.format("%,.2f m/s", correctAnswerA);
+        double correctAnswerB = Math.sqrt((eTot - potE) * 2 / mass);
+        String stringCorrectAnswerB = String.format("%,.2f m/s", correctAnswerB);
+        double correctAnswerC = Math.sqrt(eTot / spring);
+        String stringCorrectAnswerC = String.format("%,.2f m", correctAnswerC);
+        // Set up the questions and the correct answers.
+        List<String> question = new ArrayList<>();
+        question.add(String.format("A block of mass %,.2f kg can slide over a frictionless horizontal surface. " +
+                "It is attached to a spring whose stiffness constant is k = %,.2f N/m. " +
+                "The block is pulled %,.2f cm and let go. \na) What is its maximum speed? (Don't forget the units!)", mass, spring, distance));
+        question.add(String.format("b) What is its speed when the extension is %,.2f cm?", distance / 2));
+        question.add("c) At what position in meters is the kinetic energy equal to the potential energy?");
+        List<String> correctAnswer = new ArrayList<>();
+        correctAnswer.add(stringCorrectAnswerA);
+        correctAnswer.add(stringCorrectAnswerB);
+        correctAnswer.add(stringCorrectAnswerC);
+        // Set up help to show the steps and answer of the question.
+        String help = String.format("a) The maximum speed of the block is given by:\n" + "KEmax = PEmax\n" +
+                "\u00BDmV\u00B2max = \u00BDkX\u00B2max\n" +
+                "Where: m is the mass, Vmax is the maximum speed of the block, k is the spring constant and Xmax is the maximum extension.\n\n"
+                + "Given that the mass (m) of the block is %,.2f kg, its spring constant (k) is %,.2f N/m and maximum extension (X) is %,.2f cm, "
+                + "we can substitute these values into the formula to find the maximum speed:\n" +
+                "Vmax = \u221A((%,.2f N/m)/(%,.2f kg)) * (%,.2f cm)\u00B2\n" +
+                "Don't forget to convert the unit of the extension distance! (100cm = 1m)\n\n" +
+                "So, the maximum speed of the block is %,.2f m/s.\n\n\n" +
+                "b) The total energy of the spring is given by:\n" + "E = \u00BDkX\u00B2max\n" +
+                "Substitute given values into the formula to find the total energy of the spring:\n" +
+                "E = \u00BD(%,.2f N/m) * (%,.2f cm)\u00B2 = \n J" +
+                "Don't forget to convert the unit of the extension distance! (100cm = 1m)\n" +
+                "The potential energy at %,.2f cm is:\n" + "PE = \u00BD(%,.2f N/m) * (%,.2f cm)\u00B2 = %,.2f J\n" +
+                "The kinetic energy is given by:\n" + "KE = E - PE\nKE = %,.2f - %,.2f = %,.2f J" +
+                "The speed when the extension is %,.2f is:\n" + "V = \u221A((%,.2f J) * 2 / (%,.2f kg))\n\n" +
+                "So, the speed of the block when the extension is %,.2f cm is %,.2f m/s.\n\n\n" +
+                "c) Here, the kinetic energy is equal to the potential energy. As the E = %,.2f J:\n" +
+                "EK = EP = \u00BDE = \u00BD%,.2f J = %,.2f J\n" +
+                "The value of position is:\n" + "X = \u221A((%,.2f J) * 2 / (%,.2f N/m))\n\n" +
+                "So, the kinetic energy is equal to the potential energy when X = %,.2f m.", mass, spring, distance, spring, mass, distance, correctAnswerA, spring, distance, eTot, distance/2, spring, distance/2, potE, eTot, potE, eTot-potE, distance/2, eTot-potE, mass, distance/2, correctAnswerB, eTot, eTot/2, eTot/2, spring, correctAnswerC);
+        // Add the question to the list.
+        questions.add(new ShortAnswerQuestion(question, correctAnswer, help));
+    }
+
+    /**
      * Shuffles the questions of a short answer question in random orders.
      * @param qAndA A String + String map of questions and answers, in a non-random order.
      * @return shuffleQAndA A String List ArrayList of Lists of questions and answers, in shuffled order.
