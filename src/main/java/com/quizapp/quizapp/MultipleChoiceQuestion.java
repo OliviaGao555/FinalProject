@@ -38,7 +38,7 @@ public class MultipleChoiceQuestion implements Question {
 
         // create radio buttons for each option
         optionsGroup = new ToggleGroup();
-        for(String option: this.options) {
+        for (String option : this.options) {
             RadioButton optionButton = new RadioButton(option);
             optionButton.setToggleGroup(optionsGroup);
             optionButton.getStyleClass().add("custom-radio");
@@ -48,6 +48,9 @@ public class MultipleChoiceQuestion implements Question {
         // Initialize the result label and add it to the pane
         resultLabel = new Label("");
         questionPane.getChildren().add(resultLabel);
+
+        // Restore previous select if applicable
+        this.restoreSelectionIfCorrect();
 
         return questionPane;
     }
@@ -64,11 +67,10 @@ public class MultipleChoiceQuestion implements Question {
     }
 
     public void showResult(boolean isCorrect) {
+        RadioButton selectedOption = (RadioButton) optionsGroup.getSelectedToggle();
         if (isCorrect) {
-            RadioButton selectedOption = (RadioButton) optionsGroup.getSelectedToggle();
             selectedOption.getStyleClass().add("custom-right-radio");
         } else {
-            RadioButton selectedOption = (RadioButton) optionsGroup.getSelectedToggle();
             selectedOption.getStyleClass().add("custom-wrong-radio");
         }
     }
@@ -81,7 +83,7 @@ public class MultipleChoiceQuestion implements Question {
     }
 
     // Add a method to restore the saved selection
-    public void restoreSelectionIfCorrect() {
+    private void restoreSelectionIfCorrect() {
         if (savedSelectionText != null && lastAnswerWasCorrect) {
             optionsGroup.getToggles().forEach(toggle -> {
                 RadioButton rb = (RadioButton) toggle;
@@ -92,5 +94,10 @@ public class MultipleChoiceQuestion implements Question {
                 }
             });
         }
+    }
+
+    @Override
+    public boolean wasAnsweredCorrectly() {
+        return this.lastAnswerWasCorrect;
     }
 }

@@ -1,5 +1,6 @@
 package com.quizapp.quizapp;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -14,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class QuizApp extends Application {
 
@@ -44,14 +46,14 @@ public class QuizApp extends Application {
         HBox hButtons = new HBox(20, submitButton, helpButton, previousButton, nextButton);
         hButtons.setPadding(new Insets(10));
         questionCounterLabel = new Label();
-
         commonSection.getChildren().addAll(hButtons, questionCounterLabel);
-        commonSection.setPrefHeight(100);
 
         // Initialize timer label and add it to the common section
         timerLabel = new Label("Time left: " + timeLimit + " seconds");
         timerLabel.setStyle("-fx-text-fill: red; -fx-font-size: 16;");
         commonSection.getChildren().add(timerLabel);
+
+        commonSection.setPrefHeight(100);
 
         root.setBottom(commonSection);
 
@@ -65,9 +67,6 @@ public class QuizApp extends Application {
         // Initialize questions
         initializeQuestions();
         updateQuestionCounter();
-
-        // Start the timer for the first question
-        startTimer();
 
         // Display the first question
         displayQuestion(currentQuestionIndex);
@@ -126,15 +125,15 @@ public class QuizApp extends Application {
 
         questions.add(new ShortAnswerQuestion(
                 List.of("What is the term for the maximum displacement of an object from its equilibrium position in simple harmonic motion?",
-                            "What is the term for the number of oscillations per unit time",
-                            "What is the term for the time to complete a cycle"),
+                        "What is the term for the number of oscillations per unit time",
+                        "What is the term for the time to complete a cycle"),
                 List.of("Amplitude",
-                            "Frequency",
-                            "Period"),
+                        "Frequency",
+                        "Period"),
                 "Hint:\n" +
-                            "- The maximum displacement from equilibrium is often denoted by the letter 'A'.\n" +
-                            "- The number of oscillations per second is measured in Hertz (Hz).\n" +
-                            "- The time to complete one full cycle of motion is the inverse of frequency."
+                        "- The maximum displacement from equilibrium is often denoted by the letter 'A'.\n" +
+                        "- The number of oscillations per second is measured in Hertz (Hz).\n" +
+                        "- The time to complete one full cycle of motion is the inverse of frequency."
         ));
 
         // Shuffle the list to randomize the question order
@@ -142,18 +141,15 @@ public class QuizApp extends Application {
     }
 
     private void displayQuestion(int index) {
-        Platform.runLater(() -> {
-            questionSection.getChildren().clear();
-            Question currentQuestion = questions.get(index);
-            questionSection.getChildren().add(currentQuestion.getQuestionPane());
+        questionSection.getChildren().clear();
+        Question currentQuestion = questions.get(index);
+        questionSection.getChildren().add(currentQuestion.getQuestionPane());
 
-            if (currentQuestion instanceof MultipleChoiceQuestion) {
-                ((MultipleChoiceQuestion) currentQuestion).restoreSelectionIfCorrect();
-            }
-        });
-
-        // Restart the timer each time a new question is displayed
-        startTimer();
+        if (!currentQuestion.wasAnsweredCorrectly()) {
+            startTimer();
+        } else {
+            stopTimer();
+        }
     }
 
     private void updateQuestionCounter() {
@@ -162,10 +158,19 @@ public class QuizApp extends Application {
         questionCounterLabel.setText("Question " + currentQuestionNumber + " / " + totalQuestions);
     }
 
+    private void stopTimer() {
+        if (timer != null) {
+            timer.stop();
+            timer = null;
+        }
+        timerLabel.setText("");
+    }
+
     // Method to start or reset the timer for each question
     private void startTimer() {
         if (timer != null) {
-            timer.stop();  // Stop any existing timer
+            timer.stop();
+            timer = null;
         }
 
         int[] timeLeft = {timeLimit};  // Reset the time left to the limit

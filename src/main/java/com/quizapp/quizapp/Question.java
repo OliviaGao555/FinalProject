@@ -7,4 +7,5 @@ public interface Question {
     public boolean isAnswerCorrect();
     public void showResult(boolean isCorrect);
     public void showHelp();
+    public boolean wasAnsweredCorrectly();
 }
