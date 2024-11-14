@@ -18,6 +18,8 @@ public class MultipleChoiceQuestion implements Question {
     private ToggleGroup optionsGroup;
     private Label resultLabel; // Label to show the result
     private String help;
+    private String savedSelectionText = null; // Add this field to your class
+    private boolean lastAnswerWasCorrect = false;
 
     public MultipleChoiceQuestion(String questionText, String[] options, String correctAnswer, String help) {
         this.questionText = questionText;
@@ -53,8 +55,10 @@ public class MultipleChoiceQuestion implements Question {
     public boolean isAnswerCorrect() {
         RadioButton selectedOption = (RadioButton) optionsGroup.getSelectedToggle();
         if (selectedOption != null) {
-            String selectedAnswer = selectedOption.getText();
-            return selectedAnswer.equals(correctAnswer);
+            // Save the selected option's text instead of the RadioButton reference
+            savedSelectionText = selectedOption.getText(); // Assume savedSelectionText is a String field
+            lastAnswerWasCorrect = savedSelectionText.equals(correctAnswer);
+            return lastAnswerWasCorrect;
         }
         return false;
     }
@@ -74,5 +78,19 @@ public class MultipleChoiceQuestion implements Question {
     public void showHelp() {
         resultLabel.setText(help);
         resultLabel.setStyle("-fx-text-fill: green; -fx-font-style: italic;");
+    }
+
+    // Add a method to restore the saved selection
+    public void restoreSelectionIfCorrect() {
+        if (savedSelectionText != null && lastAnswerWasCorrect) {
+            optionsGroup.getToggles().forEach(toggle -> {
+                RadioButton rb = (RadioButton) toggle;
+                if (rb.getText().equals(savedSelectionText)) {
+                    rb.setSelected(true);
+                    // Optionally, apply the correct styling if needed
+                    showResult(true);
+                }
+            });
+        }
     }
 }

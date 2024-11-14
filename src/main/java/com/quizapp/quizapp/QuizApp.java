@@ -1,6 +1,9 @@
 package com.quizapp.quizapp;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.util.*;
 
 public class QuizApp extends Application {
@@ -18,11 +23,14 @@ public class QuizApp extends Application {
     public List<Question> questions;
     private int currentQuestionIndex = 0;
     private Label questionCounterLabel;
-    private int[] preserveStateArray = new int[10000];
+
+    private Timeline timer;
+    private int timeLimit = 5; // Set a time limit for each question (in seconds)
+    private Label timerLabel; // Label to display the countdown
+
     public static void main(String[] args) {
         launch(args);
     }
-    private Label alreadyAnsweredLabel;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -40,10 +48,15 @@ public class QuizApp extends Application {
         HBox hButtons = new HBox(20, submitButton, helpButton, previousButton, nextButton);
         hButtons.setPadding(new Insets(10));
         questionCounterLabel = new Label();
-        alreadyAnsweredLabel = new Label("");
 
-        commonSection.getChildren().addAll(hButtons, questionCounterLabel, alreadyAnsweredLabel);
+        commonSection.getChildren().addAll(hButtons, questionCounterLabel);
         commonSection.setPrefHeight(100);
+
+        // Initialize timer label and add it to the common section
+        timerLabel = new Label("Time left: " + timeLimit + " seconds");
+        timerLabel.setStyle("-fx-text-fill: red; -fx-font-size: 16;");
+        commonSection.getChildren().add(timerLabel);
+
         root.setBottom(commonSection);
 
         // Set up the question section
@@ -57,6 +70,9 @@ public class QuizApp extends Application {
         initializeQuestions();
         updateQuestionCounter();
 
+        // Start the timer for the first question
+        startTimer();
+
         // Display the first question
         displayQuestion(currentQuestionIndex);
 
@@ -65,11 +81,6 @@ public class QuizApp extends Application {
             Question currentQuestion = questions.get(currentQuestionIndex);
             boolean isCorrect = currentQuestion.isAnswerCorrect();
             currentQuestion.showResult(isCorrect); // Show the result in the question section
-            if (isCorrect) {
-                preserveStateArray[currentQuestionIndex] = 1;
-            } else {
-                preserveStateArray[currentQuestionIndex] = 0;
-            }
         });
 
         nextButton.setOnAction(e -> {
@@ -122,22 +133,51 @@ public class QuizApp extends Application {
     }
 
     private void displayQuestion(int index) {
-        if (preserveStateArray[index] == 1) {
+        Platform.runLater(() -> {
             questionSection.getChildren().clear();
-            questionSection.getChildren().add(questions.get(index).getQuestionPane());
-            alreadyAnsweredLabel.setText("You have already answered this question correctly!");
-            alreadyAnsweredLabel.setStyle("-fx-text-fill: green; -fx-font-size: 20; -fx-font-weight: bold;");
-            alreadyAnsweredLabel.setVisible(true);
-        } else {
-            questionSection.getChildren().clear();
-            questionSection.getChildren().add(questions.get(index).getQuestionPane());
-            alreadyAnsweredLabel.setVisible(false);
-        }
+            Question currentQuestion = questions.get(index);
+            questionSection.getChildren().add(currentQuestion.getQuestionPane());
+
+            if (currentQuestion instanceof MultipleChoiceQuestion) {
+                ((MultipleChoiceQuestion) currentQuestion).restoreSelectionIfCorrect();
+            }
+        });
+
+        // Restart the timer each time a new question is displayed
+        startTimer();
     }
 
     private void updateQuestionCounter() {
         int totalQuestions = questions.size();
         int currentQuestionNumber = currentQuestionIndex + 1;
         questionCounterLabel.setText("Question " + currentQuestionNumber + " / " + totalQuestions);
+    }
+
+    // Method to start or reset the timer for each question
+    private void startTimer() {
+        if (timer != null) {
+            timer.stop();  // Stop any existing timer
+        }
+
+        int[] timeLeft = {timeLimit};  // Reset the time left to the limit
+
+        timerLabel.setText("Time left: " + timeLeft[0] + " seconds");
+        timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            timeLeft[0]--;
+            timerLabel.setText("Time left: " + timeLeft[0] + " seconds");
+
+            if (timeLeft[0] <= 0) {
+                timer.stop();
+                showHintOnTimeout();  // Show hint if the time runs out
+            }
+        }));
+        timer.setCycleCount(timeLimit);
+        timer.playFromStart();
+    }
+
+    // Method to display the hint when the timer runs out
+    private void showHintOnTimeout() {
+        Question currentQuestion = questions.get(currentQuestionIndex);
+        currentQuestion.showHelp();
     }
 }
