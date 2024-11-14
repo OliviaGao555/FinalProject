@@ -1,6 +1,10 @@
 package com.quizapp.quizapp;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,51 +12,57 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class QuizApp extends Application {
 
     private BorderPane root;
     private VBox commonSection;
     private Pane questionSection;
-    private VBox centerSection;
     public List<Question> questions;
     private int currentQuestionIndex = 0;
     private Label questionCounterLabel;
-    private int[] preserveStateArray = new int[10000];
+
+    private Timeline timer;
+    private int timeLimit = 5; // Set a time limit for each question (in seconds)
+    private Label timerLabel; // Label to display the countdown
+
     public static void main(String[] args) {
         launch(args);
     }
-    private Label alreadyAnsweredLabel;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         root = new BorderPane();
-        // Set up the common section with buttons\
+        // Set up the common section with buttons
+        commonSection = new VBox(10);
         Button submitButton = new Button("Submit");
         Button helpButton = new Button("Help");
         Button previousButton = new Button("Previous Question");
         Button nextButton = new Button("Next Question");
         HBox hButtons = new HBox(20, submitButton, helpButton, previousButton, nextButton);
+        hButtons.setPadding(new Insets(10));
         questionCounterLabel = new Label();
-        alreadyAnsweredLabel = new Label("");
-
-        commonSection = new VBox();
         commonSection.getChildren().addAll(hButtons, questionCounterLabel);
-        commonSection.setPadding(new Insets(10));
-        commonSection.setSpacing(10);
-        root.setBottom(commonSection);
 
-        centerSection = new VBox();
-        centerSection = new VBox(alreadyAnsweredLabel);
-        root.setCenter(centerSection);
+        // Initialize timer label and add it to the common section
+        timerLabel = new Label("Time left: " + timeLimit + " seconds");
+        timerLabel.setStyle("-fx-text-fill: red; -fx-font-size: 16;");
+        commonSection.getChildren().add(timerLabel);
+
+        commonSection.setPrefHeight(100);
+
+        root.setBottom(commonSection);
 
         // Set up the question section
         questionSection = new Pane();
         questionSection.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,
                 CornerRadii.EMPTY, new BorderWidths(3))));
         questionSection.setPadding(new Insets(10));
-        root.setTop(questionSection);
+        root.setCenter(questionSection);
 
         // Initialize questions
         initializeQuestions();
@@ -66,11 +76,6 @@ public class QuizApp extends Application {
             Question currentQuestion = questions.get(currentQuestionIndex);
             boolean isCorrect = currentQuestion.isAnswerCorrect();
             currentQuestion.showResult(isCorrect); // Show the result in the question section
-            if (isCorrect) {
-                preserveStateArray[currentQuestionIndex] = 1;
-            } else {
-                preserveStateArray[currentQuestionIndex] = 0;
-            }
         });
 
         nextButton.setOnAction(e -> {
@@ -120,15 +125,15 @@ public class QuizApp extends Application {
 
         questions.add(new ShortAnswerQuestion(
                 List.of("What is the term for the maximum displacement of an object from its equilibrium position in simple harmonic motion?",
-                            "What is the term for the number of oscillations per unit time",
-                            "What is the term for the time to complete a cycle"),
+                        "What is the term for the number of oscillations per unit time",
+                        "What is the term for the time to complete a cycle"),
                 List.of("Amplitude",
-                            "Frequency",
-                            "Period"),
+                        "Frequency",
+                        "Period"),
                 "Hint:\n" +
-                            "- The maximum displacement from equilibrium is often denoted by the letter 'A'.\n" +
-                            "- The number of oscillations per second is measured in Hertz (Hz).\n" +
-                            "- The time to complete one full cycle of motion is the inverse of frequency."
+                        "- The maximum displacement from equilibrium is often denoted by the letter 'A'.\n" +
+                        "- The number of oscillations per second is measured in Hertz (Hz).\n" +
+                        "- The time to complete one full cycle of motion is the inverse of frequency."
         ));
 
         // Shuffle the list to randomize the question order
@@ -136,16 +141,14 @@ public class QuizApp extends Application {
     }
 
     private void displayQuestion(int index) {
-        if (preserveStateArray[index] == 1) {
-            questionSection.getChildren().clear();
-            questionSection.getChildren().add(questions.get(index).getQuestionPane());
-            alreadyAnsweredLabel.setText("You have already answered this question correctly!");
-            alreadyAnsweredLabel.setStyle("-fx-text-family: Verdana; -fx-text-fill: green; -fx-font-weight: bold;");
-            alreadyAnsweredLabel.setVisible(true);
+        questionSection.getChildren().clear();
+        Question currentQuestion = questions.get(index);
+        questionSection.getChildren().add(currentQuestion.getQuestionPane());
+
+        if (!currentQuestion.wasAnsweredCorrectly()) {
+            startTimer();
         } else {
-            questionSection.getChildren().clear();
-            questionSection.getChildren().add(questions.get(index).getQuestionPane());
-            alreadyAnsweredLabel.setVisible(false);
+            stopTimer();
         }
     }
 
@@ -153,5 +156,42 @@ public class QuizApp extends Application {
         int totalQuestions = questions.size();
         int currentQuestionNumber = currentQuestionIndex + 1;
         questionCounterLabel.setText("Question " + currentQuestionNumber + " / " + totalQuestions);
+    }
+
+    private void stopTimer() {
+        if (timer != null) {
+            timer.stop();
+            timer = null;
+        }
+        timerLabel.setText("");
+    }
+
+    // Method to start or reset the timer for each question
+    private void startTimer() {
+        if (timer != null) {
+            timer.stop();
+            timer = null;
+        }
+
+        int[] timeLeft = {timeLimit};  // Reset the time left to the limit
+
+        timerLabel.setText("Time left: " + timeLeft[0] + " seconds");
+        timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            timeLeft[0]--;
+            timerLabel.setText("Time left: " + timeLeft[0] + " seconds");
+
+            if (timeLeft[0] <= 0) {
+                timer.stop();
+                showHintOnTimeout();  // Show hint if the time runs out
+            }
+        }));
+        timer.setCycleCount(timeLimit);
+        timer.playFromStart();
+    }
+
+    // Method to display the hint when the timer runs out
+    private void showHintOnTimeout() {
+        Question currentQuestion = questions.get(currentQuestionIndex);
+        currentQuestion.showHelp();
     }
 }
