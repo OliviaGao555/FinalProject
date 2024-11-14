@@ -66,10 +66,10 @@ public class MultipleChoiceQuestion implements Question {
     public void showResult(boolean isCorrect) {
         if (isCorrect) {
             RadioButton selectedOption = (RadioButton) optionsGroup.getSelectedToggle();
-            selectedOption.getStyleClass().add("custom-rightRadio");
+            selectedOption.getStyleClass().add("custom-right-radio");
         } else {
             RadioButton selectedOption = (RadioButton) optionsGroup.getSelectedToggle();
-            selectedOption.getStyleClass().add("custom-wrongRadio");
+            selectedOption.getStyleClass().add("custom-wrong-radio");
         }
     }
 

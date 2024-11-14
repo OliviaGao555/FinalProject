@@ -32,7 +32,6 @@ public class ShortAnswerQuestion implements Question {
             Label questionLabel = new Label(questionText);
             TextField answerInput = new TextField();
             answerInput.setPromptText("Type your answer here...");
-            answerInput.getStyleClass().add("custom-textfield");
             answerInputs.add(answerInput); // Keep track of input fields
 
             questionPane.getChildren().addAll(questionLabel, answerInput);

@@ -10,39 +10,53 @@
     -fx-border-radius: 100%;
     -fx-background-radius: 100%;
     -fx-background-insets: 0;
+    -fx-border-width: 1.5;
+}
+.custom-radio .text {
+    -fx-font-family: "Verdana";
 }
 .custom-radio:selected .radio .dot {
     -fx-background-color: black;
     -fx-background-insets: 0;
 }
-.custom-rightRadio .radio {
+.custom-right-radio .radio {
     -fx-background-color: #addea6;
 }
-.custom-wrongRadio .radio {
+.custom-wrong-radio .radio {
     -fx-background-color: #dea6a6;
 }
 
 /* Style TextFields */
-.custom-textfield {
+.text-field {
     -fx-background-color: transparent;
     -fx-text-fill: black;
     -fx-prompt-text-fill: #addea6;
     -fx-border-color: black;
+    -fx-border-width: 1.5;
+    -fx-font-family: "Verdana";
 }
-.custom-rightTextfield {
+.custom-right-text-field {
     -fx-background-color: #addea6;
 }
-.custom-wrongTextfield {
+.custom-wrong-text-field {
     -fx-background-color: #dea6a6;
 }
 
 /* Style Buttons */
-.custom-button {
-    -fx-background-color: #00a5e0;
-    -fx-font-family: "Comic Sans MS";
-    -fx-text-fill: white;
-    -fx-background-radius: 50;
+.button {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+    -fx-border-color: black;
+    -fx-border-radius: 0;
+    -fx-border-width: 1.5;
+    -fx-font-family: "Verdana";
+    -fx-font-weight: bold;
 }
-.custom-button:pressed {
+.button:pressed {
     -fx-background-color: #addea6;
+}
+
+/* Style Labels */
+.label {
+    -fx-font-family: "Verdana";
 }
