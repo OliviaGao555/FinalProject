@@ -30,13 +30,9 @@ public class QuizApp extends Application {
         // Set up the common section with buttons
         commonSection = new VBox(10);
         Button submitButton = new Button("Submit");
-        submitButton.getStyleClass().add("custom-button");
         Button helpButton = new Button("Help");
-        helpButton.getStyleClass().add("custom-button");
         Button previousButton = new Button("Previous Question");
-        previousButton.getStyleClass().add("custom-button");
         Button nextButton = new Button("Next Question");
-        nextButton.getStyleClass().add("custom-button");
         HBox hButtons = new HBox(20, submitButton, helpButton, previousButton, nextButton);
         hButtons.setPadding(new Insets(10));
         questionCounterLabel = new Label();
@@ -115,6 +111,19 @@ public class QuizApp extends Application {
                 List.of("What is the capital of France?", "Largest planet?", "H2O is the chemical formula for?"),
                 List.of("Paris", "Jupiter", "Water"),
                 "Some hint"
+        ));
+
+        questions.add(new ShortAnswerQuestion(
+                List.of("What is the term for the maximum displacement of an object from its equilibrium position in simple harmonic motion?",
+                            "What is the term for the number of oscillations per unit time",
+                            "What is the term for the time to complete a cycle"),
+                List.of("Amplitude",
+                            "Frequency",
+                            "Period"),
+                "Hint:\n" +
+                            "- The maximum displacement from equilibrium is often denoted by the letter 'A'.\n" +
+                            "- The number of oscillations per second is measured in Hertz (Hz).\n" +
+                            "- The time to complete one full cycle of motion is the inverse of frequency."
         ));
 
         // Shuffle the list to randomize the question order
