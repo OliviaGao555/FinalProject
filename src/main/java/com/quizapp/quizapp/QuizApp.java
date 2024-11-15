@@ -17,6 +17,8 @@ public class QuizApp extends Application {
     private BorderPane root;
     private VBox commonSection;
     private GridPane questionSection;
+    private HBox progressSection;
+
     // Variables, used to present questions.
     public List<Question> questions;
     private int currentQuestionIndex = 0;
@@ -45,17 +47,21 @@ public class QuizApp extends Application {
         commonSection = new VBox();
         commonSection.getChildren().add(hButtons);
         commonSection.getChildren().add(timerLabel);
+        ProgressBar bar = new ProgressBar();
+        commonSection.getChildren().add(bar.getPane());
         commonSection.setSpacing(10);   // Space between timer & buttons
         commonSection.setPadding(new Insets(20));   // Space wrapped around the common section
-        commonSection.setPrefHeight(100);
+        commonSection.setPrefHeight(200);
         // Set up the question section.
         questionSection = new GridPane();
         questionSection.setPadding(new Insets(20));   // Space wrapped around the question section
+
 
         // Set up the root.
         root = new BorderPane();
         root.setCenter(questionSection);
         root.setBottom(commonSection);
+
 
         // Initialize questions and display the first question.
         initializeQuestions();
