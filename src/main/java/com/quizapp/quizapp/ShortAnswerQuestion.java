@@ -70,6 +70,7 @@ public class ShortAnswerQuestion implements Question {
         helpLabel.setMaxWidth(845);
         ScrollPane scrollPane = new ScrollPane(helpLabel);
         scrollPane.setMaxHeight(200);
+        scrollPane.setMinHeight(200);
         scrollPane.setMaxWidth(865);
         questionV.getChildren().add(scrollPane);
 
