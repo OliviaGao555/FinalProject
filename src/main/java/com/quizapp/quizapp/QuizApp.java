@@ -50,8 +50,8 @@ public class QuizApp extends Application {
         commonSection = new VBox();
         commonSection.getChildren().add(hButtons);
         commonSection.getChildren().add(timerLabel);
-        ProgressBar bar = new ProgressBar();
-        commonSection.getChildren().add(bar.getPane());
+        ProgressBar progressBar = new ProgressBar();
+        commonSection.getChildren().add(progressBar.getPane());
         commonSection.setSpacing(10);   // Space between timer & buttons
         commonSection.setPadding(new Insets(20));   // Space wrapped around the common section
         commonSection.setPrefHeight(200);
@@ -75,6 +75,10 @@ public class QuizApp extends Application {
             Question currentQuestion = questions.get(currentQuestionIndex);
             boolean isCorrect = currentQuestion.isAnswerCorrect();
             currentQuestion.showResult(isCorrect);
+
+            // Update the progress bar
+
+            progressBar.updateCircleColor(currentQuestionIndex, isCorrect);
         });
         nextButton.setOnAction(e -> {
             if (currentQuestionIndex < questions.size() - 1) {
