@@ -7,7 +7,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -23,6 +26,9 @@ public class MultipleChoiceQuestion implements Question {
     private String hint;
     private String savedSelectionText = null;
     private boolean lastAnswerWasCorrect = false;
+    // Variables, used for audio.
+    private File soundFile = new File("ding.mp3");
+    private Media media = new Media(soundFile.toURI().toString());
 
     // Constructor.
     public MultipleChoiceQuestion(String questionText, String[] options, String correctAnswer, String help, String hint) {
@@ -88,6 +94,8 @@ public class MultipleChoiceQuestion implements Question {
             resultLabel.setText("Your answer is correct!");
             resultLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold");
             selectedOption.getStyleClass().add("custom-right-radio");
+            MediaPlayer player = new MediaPlayer(media);
+            player.play();
         } else {
             resultLabel.setText("Your answer is incorrect. Try again!");
             resultLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold");

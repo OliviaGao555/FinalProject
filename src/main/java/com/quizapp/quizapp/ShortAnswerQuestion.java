@@ -5,6 +5,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +23,9 @@ public class ShortAnswerQuestion implements Question {
     private String help;
     private String hint;
     private boolean lastAnswerWasCorrect = false;
+    // Variables, used for audio.
+    private File soundFile = new File("ding.mp3");
+    private Media media = new Media(soundFile.toURI().toString());
 
     // Constructor.
     public ShortAnswerQuestion(List<String> questionTexts, List<String> correctAnswers, String help, String hint) {
@@ -109,6 +116,8 @@ public class ShortAnswerQuestion implements Question {
             for (int i = 0; i < answerInputs.size(); i++) {
                 answerInputs.get(i).getStyleClass().add("custom-right-text-field");
             }
+            MediaPlayer player = new MediaPlayer(media);
+            player.play();
         } else {
             resultLabel.setText("One or more answers are incorrect. Try again!");
             resultLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold");
