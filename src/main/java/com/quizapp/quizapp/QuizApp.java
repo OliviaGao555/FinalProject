@@ -4,9 +4,12 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -84,12 +87,57 @@ public class QuizApp extends Application {
             currentQuestion.showHelp();
         });
 
+        //authenticator
+
+        Label userLabel = new Label("Username:");
+        TextField userTextField = new TextField();
+        Label passwordLabel = new Label("Password:");
+        PasswordField passwordField = new PasswordField();
+        Button loginButton = new Button("Login");
+        Label messageLabel = new Label();
+
+        GridPane gridPane = new GridPane();
+        gridPane.setVgap(10);
+        gridPane.setHgap(10);
+        gridPane.add(userLabel, 0, 0);
+        gridPane.add(userTextField, 1, 0);
+        gridPane.add(passwordLabel, 0, 1);
+        gridPane.add(passwordField, 1, 1);
+        gridPane.add(loginButton, 1, 2);
+        gridPane.add(messageLabel, 1, 3);
+        gridPane.setAlignment(Pos.CENTER);
+
         // Set up the scene.
         Scene scene = new Scene(root, 1132, 700);
+        Scene authenticationScene = new Scene(gridPane, 500, 250);
         scene.getStylesheets().add("style.css");
-        primaryStage.setScene(scene);
+        authenticationScene.getStylesheets().add("style.css");
+        primaryStage.setScene(authenticationScene);
         primaryStage.setTitle("Quiz App");
         primaryStage.show();
+
+        loginButton.setOnAction(e -> {
+            String username = userTextField.getText();
+            String password = passwordField.getText();
+            if (authenticate(username, password)) {
+                primaryStage.close();
+                showMainApplication(scene);
+            } else {
+                messageLabel.setText("Invalid credentials. Try Again.");
+                messageLabel.setStyle("-fx-text-fill: red");
+            }
+        });
+    }
+
+    private void showMainApplication(Scene scene) {
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Quiz App");
+        stage.show();
+    }
+
+    private boolean authenticate(String username, String password) {
+        return "1".equals(username) && "1".equals(password);
     }
 
     // Method to initialize a list of questions
