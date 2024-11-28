@@ -46,8 +46,9 @@ public class QuizApp extends Application {
         Button helpButton = new Button("Help");
         Button previousButton = new Button("Previous Question");
         Button nextButton = new Button("Next Question");
-        Button openGoogleButton = new Button("Google!");
-        HBox hButtons = new HBox(30, submitButton, helpButton, previousButton, nextButton, openGoogleButton);
+        Button openGoogleButton = new Button("Ask Google!");
+        Button openChatButton = new Button("Ask Chat!");
+        HBox hButtons = new HBox(25, submitButton, helpButton, previousButton, nextButton, openGoogleButton, openChatButton);
         // Set up timer label.
         timerLabel = new Label("Time left: " + timeLimit + " seconds");
         timerLabel.setStyle("-fx-text-fill: #addea6;");
@@ -100,6 +101,19 @@ public class QuizApp extends Application {
                     Desktop desktop = Desktop.getDesktop();
                     if (desktop.isSupported(Desktop.Action.BROWSE)) {
                         URI uri = new URI("https://www.google.com");
+                        desktop.browse(uri);
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        openChatButton.setOnAction(e -> {
+            try {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop desktop = Desktop.getDesktop();
+                    if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                        URI uri = new URI("https://chatgpt.com");
                         desktop.browse(uri);
                     }
                 }
@@ -222,6 +236,7 @@ public class QuizApp extends Application {
         Scene registerScene = new Scene(gridPane, 500, 250);
         registerScene.getStylesheets().add("style.css");
         Stage registerStage = new Stage();
+        registerStage.setResizable(false);
         registerStage.setScene(registerScene);
         registerStage.setTitle("Register Window");
         registerStage.show();
@@ -259,6 +274,7 @@ public class QuizApp extends Application {
     //Method to show main application after authentication
     private void showMainApplication(Scene scene) {
         Stage stage = new Stage();
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.setTitle("Quiz App");
         stage.show();

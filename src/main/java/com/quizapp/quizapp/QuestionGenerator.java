@@ -169,9 +169,9 @@ public class QuestionGenerator {
         // Set up each value needed to create the terms question.
         List<String> question = shuffledQAndA.get(0);
         List<String> correctAnswer = shuffledQAndA.get(1);
-        String help = "The maximum displacement of an object from its equilibrium position in simple harmonic motion: Amplitude\n" +
-                "The number of oscillations per unit time: Frequency\n" +
-                "The time to complete a cycle: Period";
+        String help = "The maximum displacement of an object from its equilibrium position in simple harmonic motion:\nAmplitude\n\n" +
+                "The number of oscillations per unit time:\nFrequency\n\n" +
+                "The time to complete a cycle:\nPeriod";
         String hint = "- The maximum displacement from equilibrium is often denoted by the letter 'A'.\n" +
                 "- The number of oscillations per second is measured in Hertz (Hz).\n" +
                 "- The time to complete one full cycle of motion is the inverse of frequency.";
