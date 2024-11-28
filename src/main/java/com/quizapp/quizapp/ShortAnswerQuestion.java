@@ -114,6 +114,7 @@ public class ShortAnswerQuestion implements Question {
             resultLabel.setText("All answers are correct!");
             resultLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold");
             for (int i = 0; i < answerInputs.size(); i++) {
+                answerInputs.get(i).getStyleClass().remove("custom-wrong-text-field");
                 answerInputs.get(i).getStyleClass().add("custom-right-text-field");
             }
             MediaPlayer player = new MediaPlayer(media);
@@ -122,6 +123,7 @@ public class ShortAnswerQuestion implements Question {
             resultLabel.setText("One or more answers are incorrect. Try again!");
             resultLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold");
             for (int i = 0; i < answerInputs.size(); i++) {
+                answerInputs.get(i).getStyleClass().remove("custom-right-text-field");
                 answerInputs.get(i).getStyleClass().add("custom-wrong-text-field");
             }
         }
