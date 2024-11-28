@@ -73,6 +73,69 @@ public class QuestionGenerator {
     }
 
     /**
+     * Adds a true or false question into the questions that will be displayed to the user.
+     * @param questions the ArrayList of all questions.
+     */
+    public static void trueFalseQuestion(List<Question> questions) {
+        // Set up the options.
+        String t = "True";
+        String f = "False";
+        String[] options = {t, f};
+        String[] shuffledOptions = shuffleOptions(options);
+        // Randomize numbers for the question.
+        double randomF1 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.50,2.50)).replace(",","."));
+        double randomF2 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(0.50,1.25)).replace(",","."));
+        double randomAddedMass = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(10.00,90.00)).replace(",","."));
+        // Pick actual values for the question.
+        double f1 = randomF1;
+        double f2 = randomF2;
+        double addedMass = randomAddedMass;
+        //Calculate the correct answer.
+        double firstE = (f1 * 2 * Math.PI) * (f1 * 2 * Math.PI);
+        double secondE = (f2 * 2 * Math.PI) * (f2 * 2 * Math.PI);
+        double answer = (secondE * addedMass) / (firstE - secondE);
+        // Set up the correct answer to pick for the question.
+        String correctAnswer = String.format("%,.2f", answer);
+        String randomAnswer = Double.toString(Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(10.00,100.00)).replace(",",".")));
+        String result = "";
+        String[] answers = {correctAnswer, randomAnswer};
+        String[] shuffledAnswers = shuffleOptions(answers);
+        String mass = shuffledAnswers[0];
+        if (mass.equals(correctAnswer)) {
+            result = "True";
+        } else {
+            result = "False";
+        }
+        // Write answer for the question.
+        String help = String.format("To find the mass of spring block system we use the formula for the frequency of the mass spring system:\n" +
+                "f = \u00BD(1/\u03c0)\u221A(k/m)\n\n" +
+                "Where: \n" +
+                "f = Frequency (in hertz)\n" +
+                "k = Spring constant N/m\n" + "m = Mass in kg (1000 g = 1 kg)\n\n" +
+                "The initial frequency given in question is %,.2f Hz:\n" +
+                "%,.2f Hz = \u00BD(1/\u03c0)\u221A(k/m)\n" +
+                "k/m = (%,.2f)\u00B2\n" +
+                "k = %,.2f * m\n\n" +
+                "Frequency after adding %,.2f kg becomes %,.2f Hz. Use the same formula for new frequency with added mass:\n" +
+                "%,.2f Hz = \u00BD(1/\u03c0)\u221A(k/(m + %,.2f kg))\n" +
+                "(%,.2f)\u00B2 = k/(m + %,.2f kg)\n" +
+                "%,.2f * m + %,.2f kg = k\n\n" +
+                "Now combine the two equations:\n" +
+                "%,.2f * m + %,.2f kg = %,.2f * m\n" +
+                "%,.2f * m = %,.2f kg\n" +
+                "m = %,.2f g\n" +
+                "The mass of the spring block system is: %,.2f g\n\n" +
+                "The answer is %s.", f1, f1, (f1 * 2 * Math.PI), firstE, addedMass/1000, f2, f2, addedMass/1000, (f2 * 2 * Math.PI), addedMass/1000, secondE, (secondE * addedMass/1000), secondE, (secondE * addedMass/1000), firstE, (firstE - secondE), (secondE * addedMass/1000), answer, answer, result);
+        // Write hint for question.
+        String hint = "Think of the formula:\n" +
+                "f = \u00BD(1/\u03c0)\u221A(k/m)";
+        // Write the question itself.
+        String questionText = String.format("With a block of mass m, the frequency of a block-spring system is %,.2f Hz. " +
+                "When %,.2f g are added, the frequency drops to %,.2f Hz.\nm equals to %s g.", f1, addedMass, f2, mass);
+        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, result, help, hint));
+    }
+
+    /**
      * Shuffles the options of a multiple choice question in random orders.
      * @param options A String Array of options, in a non-random order.
      * @return shuffleOptions A String Array of options, in shuffled order.
