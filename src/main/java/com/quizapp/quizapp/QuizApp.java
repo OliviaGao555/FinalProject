@@ -216,7 +216,7 @@ public class QuizApp extends Application {
 
         registerButton.setOnAction(e -> {
             String newUsername = newUserTextField.getText().toLowerCase();
-            String newPassword = newPasswordField.getText().toLowerCase();
+            String newPassword = newPasswordField.getText();
             try {
                 if (newUserTextField.getText().isEmpty() || newPasswordField.getText().isEmpty()) {
                     messageLabel.setStyle("-fx-text-fill: red;");
@@ -283,7 +283,8 @@ public class QuizApp extends Application {
 
     //Method to check if the user is in the database
     private boolean authenticate(String username, String password) {
-        return userDatabase.containsKey(username) && userDatabase.get(username).equals(password);
+        return userDatabase.containsKey(username.toLowerCase()) &&
+                userDatabase.get(username.toLowerCase()).equals(password);
     }
 
     // Method to initialize a list of questions
