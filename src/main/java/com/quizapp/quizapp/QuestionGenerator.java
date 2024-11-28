@@ -27,8 +27,8 @@ public class QuestionGenerator {
         double randomAnswer3 = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(1.00,500.00)).replace(",","."));
         String answer = String.format("%,.2f", correctAnswer);
         // Set up help to show the steps and answer of the question.
-        String help = String.format("The frequency of a wave can be calculated using the formula:\n" + "f = v/λ\n" +
-                "Where: f is the frequency, v is the velocity of the wave, and λ is the wavelength of the wave.\n\n" +
+        String help = String.format("The frequency of a wave can be calculated using the formula:\n" + "f = v/λ\n\n" +
+                "Where:\nf is the frequency\nv is the velocity of the wave\nλ is the wavelength of the wave\n\n" +
                 "Given that the velocity (v) of the wave is %,.2f m/s and the wavelength (λ) is %,.2f cm, " +
                 "we can substitute these values into the formula to find the frequency:\n" +
                 "f = (%,.2f m/s)/(%,.2f cm)\n" +
@@ -152,8 +152,8 @@ public class QuestionGenerator {
         correctAnswer.add(stringCorrectAnswerC);
         // Set up help to show the steps and answer of the question.
         String help = String.format("a) The maximum speed of the block is given by:\n" + "KEmax = PEmax\n" +
-                "\u00BDmV\u00B2max = \u00BDkX\u00B2max\n" +
-                "Where: m is the mass, Vmax is the maximum speed of the block, k is the spring constant and Xmax is the maximum extension.\n\n"
+                "\u00BDmV\u00B2max = \u00BDkX\u00B2max\n\n" +
+                "Where:\nm is the mass\nVmax is the maximum speed of the block\nk is the spring constant\nXmax is the maximum extension\n\n"
                 + "Given that the mass (m) of the block is %,.2f kg, its spring constant (k) is %,.2f N/m and maximum extension (X) is %,.2f cm, "
                 + "we can substitute these values into the formula to find the maximum speed:\n" +
                 "Vmax = \u221A(((%,.2f N/m)/(%,.2f kg)) * (%,.2f cm)\u00B2)\n" +
@@ -163,14 +163,14 @@ public class QuestionGenerator {
                 "b) The total energy of the spring is given by:\n" + "E = \u00BDkX\u00B2max\n" +
                 "Substitute given values into the formula to find the total energy of the spring:\n" +
                 "E = \u00BD(%,.2f N/m) * (%,.2f cm)\u00B2 = %,.2f J\n" +
-                "Don't forget to convert the unit of the extension distance! (100cm = 1m)\n" +
-                "The potential energy at %,.2f cm is:\n" + "PE = \u00BD(%,.2f N/m) * (%,.2f cm)\u00B2 = %,.2f J\n" +
-                "The kinetic energy is given by:\n" + "KE = E - PE\nKE = %,.2f - %,.2f = %,.2f J" +
-                "The speed when the extension is %,.2f is:\n" + "V = \u221A((%,.2f J) * 2 / (%,.2f kg))\n\n" +
+                "Don't forget to convert the unit of the extension distance! (100cm = 1m)\n\n" +
+                "The potential energy at %,.2f cm is:\n" + "PE = \u00BD(%,.2f N/m) * (%,.2f cm)\u00B2 = %,.2f J\n\n" +
+                "The kinetic energy is given by:\n" + "KE = E - PE\nKE = %,.2f - %,.2f = %,.2f J\n\n" +
+                "The speed when the extension is %,.2f cm is:\n" + "V = \u221A((%,.2f J) * 2 / (%,.2f kg))\n\n" +
                 "So, the speed of the block when the extension is %,.2f cm is %,.2f m/s.\n\n\n" +
 
                 "c) Here, the kinetic energy is equal to the potential energy. As the E = %,.2f J:\n" +
-                "EK = EP = \u00BDE = \u00BD%,.2f J = %,.2f J\n" +
+                "EK = EP = \u00BDE = \u00BD%,.2f J = %,.2f J\n\n" +
                 "The value of position is:\n" + "X = \u221A((%,.2f J) * 2 / (%,.2f N/m))\n\n" +
                 "So, the kinetic energy is equal to the potential energy when X = %,.2f m.", mass, spring, distance, spring, mass, distance, correctAnswerA, spring, distance, eTot, distance/2, spring, distance/2, potE, eTot, potE, eTot-potE, distance/2, eTot-potE, mass, distance/2, correctAnswerB, eTot, eTot, eTot/2, eTot/2, spring, correctAnswerC);
         String hint = "Here are some useful formulas:\n" +

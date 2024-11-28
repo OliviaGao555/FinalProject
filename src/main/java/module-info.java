@@ -8,9 +8,9 @@ module com.quizapp.quizapp {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
-//    requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires javafx.media;
+    requires java.desktop;
 
     opens com.quizapp.quizapp to javafx.fxml;
     exports com.quizapp.quizapp;

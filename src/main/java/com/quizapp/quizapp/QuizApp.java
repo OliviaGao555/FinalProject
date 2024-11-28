@@ -11,13 +11,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.*;
 import java.util.*;
+import java.net.URI;
+import java.awt.*;
+import java.util.List;
 
 public class QuizApp extends Application {
     // Variables, big components of the application.
@@ -45,7 +46,8 @@ public class QuizApp extends Application {
         Button helpButton = new Button("Help");
         Button previousButton = new Button("Previous Question");
         Button nextButton = new Button("Next Question");
-        HBox hButtons = new HBox(30, submitButton, helpButton, previousButton, nextButton);
+        Button openGoogleButton = new Button("Google!");
+        HBox hButtons = new HBox(30, submitButton, helpButton, previousButton, nextButton, openGoogleButton);
         // Set up timer label.
         timerLabel = new Label("Time left: " + timeLimit + " seconds");
         timerLabel.setStyle("-fx-text-fill: #addea6;");
@@ -91,6 +93,19 @@ public class QuizApp extends Application {
         helpButton.setOnAction(e -> {
             Question currentQuestion = questions.get(currentQuestionIndex);
             currentQuestion.showHelp();
+        });
+        openGoogleButton.setOnAction(e -> {
+            try {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop desktop = Desktop.getDesktop();
+                    if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                        URI uri = new URI("https://www.google.com");
+                        desktop.browse(uri);
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
 
         //authenticator
