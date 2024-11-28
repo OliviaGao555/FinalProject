@@ -29,6 +29,7 @@ public class MultipleChoiceQuestion implements Question {
     // Variables, used for audio.
     private File soundFile = new File("ding.mp3");
     private Media media = new Media(soundFile.toURI().toString());
+    MediaPlayer player = new MediaPlayer(media);
 
     // Constructor.
     public MultipleChoiceQuestion(String questionText, String[] options, String correctAnswer, String help, String hint) {
@@ -94,7 +95,6 @@ public class MultipleChoiceQuestion implements Question {
             resultLabel.setText("Your answer is correct!");
             resultLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold");
             selectedOption.getStyleClass().add("custom-right-radio");
-            MediaPlayer player = new MediaPlayer(media);
             player.play();
         } else {
             resultLabel.setText("Your answer is incorrect. Try again!");

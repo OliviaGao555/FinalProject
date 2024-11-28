@@ -26,6 +26,7 @@ public class ShortAnswerQuestion implements Question {
     // Variables, used for audio.
     private File soundFile = new File("ding.mp3");
     private Media media = new Media(soundFile.toURI().toString());
+    MediaPlayer player = new MediaPlayer(media);
 
     // Constructor.
     public ShortAnswerQuestion(List<String> questionTexts, List<String> correctAnswers, String help, String hint) {
@@ -117,7 +118,6 @@ public class ShortAnswerQuestion implements Question {
                 answerInputs.get(i).getStyleClass().remove("custom-wrong-text-field");
                 answerInputs.get(i).getStyleClass().add("custom-right-text-field");
             }
-            MediaPlayer player = new MediaPlayer(media);
             player.play();
         } else {
             resultLabel.setText("One or more answers are incorrect. Try again!");
