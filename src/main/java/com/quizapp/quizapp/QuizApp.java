@@ -142,6 +142,7 @@ public class QuizApp extends Application {
         primaryStage.setTitle("Quiz App");
         loadUserData();
         primaryStage.show();
+        stopTimer();
 
         loginButton.setOnAction(e -> {
             String username = userTextField.getText();
@@ -261,6 +262,7 @@ public class QuizApp extends Application {
         stage.setScene(scene);
         stage.setTitle("Quiz App");
         stage.show();
+        startTimer();
     }
 
     //Method to check if the user is in the database
