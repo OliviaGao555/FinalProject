@@ -16,7 +16,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 
 public class QuizApp extends Application {
@@ -31,6 +31,8 @@ public class QuizApp extends Application {
     private Timeline timer;
     private int timeLimit = 180;
     private Label timerLabel;
+    private Properties userDatabase = new Properties();
+    private final String userDataFile = "userData.properties";
 
     public static void main(String[] args) {
         launch(args);
@@ -92,12 +94,16 @@ public class QuizApp extends Application {
         });
 
         //authenticator
-
         Label userLabel = new Label("Username:");
         TextField userTextField = new TextField();
+        userTextField.setPrefWidth(200);
+        userTextField.setMaxWidth(200);
         Label passwordLabel = new Label("Password:");
         PasswordField passwordField = new PasswordField();
+        passwordField.setPrefWidth(200);
+        passwordField.setMaxWidth(200);
         Button loginButton = new Button("Login");
+        Button registerButton = new Button("Register");
         Label messageLabel = new Label();
 
         GridPane gridPane = new GridPane();
@@ -108,7 +114,8 @@ public class QuizApp extends Application {
         gridPane.add(passwordLabel, 0, 1);
         gridPane.add(passwordField, 1, 1);
         gridPane.add(loginButton, 1, 2);
-        gridPane.add(messageLabel, 1, 3);
+        gridPane.add(registerButton, 1, 3);
+        gridPane.add(messageLabel, 1, 4);
         gridPane.setAlignment(Pos.CENTER);
 
         // Set up the scene.
@@ -118,21 +125,122 @@ public class QuizApp extends Application {
         authenticationScene.getStylesheets().add("style.css");
         primaryStage.setScene(authenticationScene);
         primaryStage.setTitle("Quiz App");
+        loadUserData();
         primaryStage.show();
 
         loginButton.setOnAction(e -> {
             String username = userTextField.getText();
             String password = passwordField.getText();
-            if (authenticate(username, password)) {
+            if (userTextField.getText().isEmpty() || passwordField.getText().isEmpty()) {
+                messageLabel.setStyle("-fx-text-fill: red");
+                messageLabel.setText("Please fill out both fields.");
+            } else if (authenticate(username, password)) {
                 primaryStage.close();
                 showMainApplication(scene);
             } else {
-                messageLabel.setText("Invalid credentials. Try Again.");
                 messageLabel.setStyle("-fx-text-fill: red");
+                messageLabel.setText("Invalid credentials. Try Again.");
             }
+        });
+
+        registerButton.setOnAction(e -> {
+            primaryStage.close();
+            registerWindow(primaryStage);
         });
     }
 
+    private void loadUserData() throws FileNotFoundException {
+        try (FileInputStream fileInputStream = new FileInputStream(userDataFile)) {
+            userDatabase.load(fileInputStream);
+        } catch (IOException e) {
+            System.out.println("File not found");
+        }
+    }
+
+    //Method to show register window
+    private void registerWindow(Stage stage) {
+        Label newUserLabel = new Label("New Username:");
+        TextField newUserTextField = new TextField();
+        newUserTextField.setPrefWidth(200);
+        newUserTextField.setMaxWidth(200);
+        Label newPasswordLabel = new Label("New Password:");
+        PasswordField newPasswordField = new PasswordField();
+        newPasswordField.setPrefWidth(200);
+        newPasswordField.setMaxWidth(200);
+        Button registerButton = new Button("Register");
+        Button returnButton = new Button("Return to Login");
+        Label messageLabel = new Label();
+
+        // Create layout and add UI elements for the registration window
+        GridPane gridPane = new GridPane();
+        gridPane.setVgap(10);
+        gridPane.setHgap(10);
+        gridPane.add(newUserLabel, 0, 0);
+        gridPane.add(newUserTextField, 1, 0);
+        gridPane.add(newPasswordLabel, 0, 1);
+        gridPane.add(newPasswordField, 1, 1);
+        gridPane.add(registerButton, 1, 2);
+        gridPane.add(returnButton, 1, 3);
+        gridPane.add(messageLabel, 1, 4);
+        gridPane.setAlignment(Pos.CENTER);
+
+        registerButton.setOnAction(e -> {
+            String newUsername = newUserTextField.getText().toLowerCase();
+            String newPassword = newPasswordField.getText().toLowerCase();
+            try {
+                if (newUserTextField.getText().isEmpty() || newPasswordField.getText().isEmpty()) {
+                    messageLabel.setStyle("-fx-text-fill: red;");
+                    messageLabel.setText("Please fill out both fields");
+                } else if (register(newUsername, newPassword)) {
+                    messageLabel.setStyle("-fx-text-fill: green;");
+                    messageLabel.setText("Registration successful!");
+                } else {
+                    messageLabel.setStyle("-fx-text-fill: red;");
+                    messageLabel.setText("Username already exists. Try a different one.");
+                }
+            } catch (IOException ex) {
+                System.out.println("Issue with file");
+            }
+        });
+
+        Scene registerScene = new Scene(gridPane, 500, 250);
+        registerScene.getStylesheets().add("style.css");
+        Stage registerStage = new Stage();
+        registerStage.setScene(registerScene);
+        registerStage.setTitle("Register Window");
+        registerStage.show();
+
+        returnButton.setOnAction(e -> {
+            registerStage.close();
+            showLoginPage(stage);
+        });
+    }
+
+    //Method to show login page after
+    private void showLoginPage(Stage stage) {
+        stage.show();
+    }
+
+    //Method to register new user to database
+    private boolean register(String username, String password) throws IOException {
+        if (userDatabase.containsKey(username)) {
+            return false;
+        }
+        userDatabase.setProperty(username, password);
+        saveUserData();
+        return true;
+    }
+
+    //Method to save new user data to database file after registration
+    private void saveUserData() {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(userDataFile)) {
+            userDatabase.store(fileOutputStream, null);
+        } catch (IOException e) {
+            System.out.println("Issue with the file");
+        }
+    }
+
+    //Method to show main application after authentication
     private void showMainApplication(Scene scene) {
         Stage stage = new Stage();
         stage.setScene(scene);
@@ -140,8 +248,9 @@ public class QuizApp extends Application {
         stage.show();
     }
 
+    //Method to check if the user is in the database
     private boolean authenticate(String username, String password) {
-        return "1".equals(username) && "1".equals(password);
+        return userDatabase.containsKey(username) && userDatabase.get(username).equals(password);
     }
 
     // Method to initialize a list of questions
