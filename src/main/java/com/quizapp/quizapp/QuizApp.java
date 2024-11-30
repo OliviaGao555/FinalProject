@@ -313,6 +313,15 @@ public class QuizApp extends Application {
         // Q7.
         QuestionGenerator.trueFalseQuestion(questions);
 
+        // Q8.
+        QuestionGenerator.periodQuestion(questions);
+
+        // Q9.
+        QuestionGenerator.periodQuestion(questions);
+
+        // Q10.
+        QuestionGenerator.slideQuestion(questions);
+
         // Shuffle the list to randomize the question order.
         Collections.shuffle(questions);
     }

@@ -108,23 +108,13 @@ public class QuestionGenerator {
         }
         // Write answer for the question.
         String help = String.format("To find the mass of spring block system we use the formula for the frequency of the mass spring system:\n" +
-                "f = \u00BD(1/\u03c0)\u221A(k/m)\n\n" +
-                "Where: \n" +
-                "f = Frequency (in hertz)\n" +
-                "k = Spring constant N/m\n" + "m = Mass in kg (1000 g = 1 kg)\n\n" +
-                "The initial frequency given in question is %,.2f Hz:\n" +
-                "%,.2f Hz = \u00BD(1/\u03c0)\u221A(k/m)\n" +
-                "k/m = (%,.2f)\u00B2\n" +
-                "k = %,.2f * m\n\n" +
+                "f = \u00BD(1/\u03c0)\u221A(k/m)\n\n" + "Where:\n" + "f = Frequency (in hertz)\n" +
+                "k = Spring constant N/m\n" + "m = Mass in kg (1000 g = 1 kg)\n\n" + "The initial frequency given in question is %,.2f Hz:\n" +
+                "%,.2f Hz = \u00BD(1/\u03c0)\u221A(k/m)\n" + "k/m = (%,.2f)\u00B2\n" + "k = %,.2f * m\n\n" +
                 "Frequency after adding %,.2f kg becomes %,.2f Hz. Use the same formula for new frequency with added mass:\n" +
-                "%,.2f Hz = \u00BD(1/\u03c0)\u221A(k/(m + %,.2f kg))\n" +
-                "(%,.2f)\u00B2 = k/(m + %,.2f kg)\n" +
-                "%,.2f * m + %,.2f kg = k\n\n" +
-                "Now combine the two equations:\n" +
-                "%,.2f * m + %,.2f kg = %,.2f * m\n" +
-                "%,.2f * m = %,.2f kg\n" +
-                "m = %,.2f g\n" +
-                "The mass of the spring block system is: %,.2f g\n\n" +
+                "%,.2f Hz = \u00BD(1/\u03c0)\u221A(k/(m + %,.2f kg))\n" + "(%,.2f)\u00B2 = k/(m + %,.2f kg)\n" +
+                "%,.2f * m + %,.2f kg = k\n\n" + "Now combine the two equations:\n" + "%,.2f * m + %,.2f kg = %,.2f * m\n" +
+                "%,.2f * m = %,.2f kg\n" + "m = %,.2f g\n" + "The mass of the spring block system is: %,.2f g\n\n" +
                 "The answer is %s.", f1, f1, (f1 * 2 * Math.PI), firstE, addedMass/1000, f2, f2, addedMass/1000, (f2 * 2 * Math.PI), addedMass/1000, secondE, (secondE * addedMass/1000), secondE, (secondE * addedMass/1000), firstE, (firstE - secondE), (secondE * addedMass/1000), answer, answer, result);
         // Write hint for question.
         String hint = "Think of the formula:\n" +
@@ -154,6 +144,37 @@ public class QuestionGenerator {
     }
 
     // Short answer questions.
+    /**
+     * Adds a slide short answer question into the questions that will be displayed to the user.
+     * @param questions the ArrayList of all questions.
+     */
+    public static void periodQuestion(List<Question> questions) {
+        // Create random numbers for the two variables of the question.
+        double randomL = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(0.10,1.00)).replace(",","."));
+        double randomD = Double.parseDouble(new DecimalFormat("#.##").format(ThreadLocalRandom.current().nextDouble(10.00,30.00)).replace(",","."));
+        double length = randomL;
+        double degrees = randomD;
+        // Calculate answer.
+        double period = 2 * Math.PI * Math.sqrt(length / 9.81);
+        // Set up the question and the correct answer.
+        String question = String.format("A simple pendulum of length %,.2f m is released when it makes an angle of " +
+                "%,.2f degrees with the vertical. Find it's period. (Unit: s)", length, degrees);
+        List<String> q = new ArrayList<>();
+        q.add(question);
+        String correctAnswer = String.format("%,.2f s", period);
+        List<String> a = new ArrayList<>();
+        a.add(correctAnswer);
+        // Set up help to show the steps and answer of the question.
+        String help = String.format("The time period of oscillation is given by:\n" +
+                "T = 2\u03C0\u221A(l/g)\n\n" + "Where:\n" + "l is the length of the pendulum (m)\n" +
+                "g is the constant of gravitation acceleration on Earth that equals to 9.81 m/s\u00B2\n\n" +
+                "Plug in the numbers into the formula:\n" + "T = 2\u03C0\u221A(%,.2f m/9.81 m/s\u00B2)\n" + "T = %,.2f\n\n" +
+                "The period of this pendulum system is %,.2f s", length, period, period);
+        String hint = "Think about the formula:\nT = 2\u03C0\u221A(l/g)";
+        // Add the question to the list.
+        questions.add(new ShortAnswerQuestion(q, a, help, hint));
+    }
+
     /**
      * Adds a terms short answer question into the questions that will be displayed to the user.
      * @param questions the ArrayList of all questions.
