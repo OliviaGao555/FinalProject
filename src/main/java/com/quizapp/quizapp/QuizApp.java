@@ -20,7 +20,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 import java.net.URI;
@@ -64,10 +63,11 @@ public class QuizApp extends Application {
         // Set up progression bar
         ProgressBar progressBar = new ProgressBar();
         progressBar.setOnCircleClickListener(questionIndex -> {
-            // Navigate to the corresponding question
+            // Go to the corresponding question
             currentQuestionIndex = questionIndex;
             displayQuestion(questionIndex);
         });
+
         // Set up timer label.
         timerLabel = new Label("Time left: " + timeLimit + " seconds");
         timerLabel.setStyle("-fx-text-fill: #addea6;");
@@ -79,9 +79,9 @@ public class QuizApp extends Application {
         commonSection.getChildren().add(progressBar.getPane());
         commonSection.setSpacing(10);   // Space between timer & buttons
         commonSection.setPadding(new Insets(20));   // Space wrapped around the common section
-        commonSection.setPrefHeight(200);
-        commonSection.setMaxHeight(200);
-        commonSection.setMinHeight(200);
+        commonSection.setPrefHeight(500);
+        commonSection.setMaxHeight(500);
+        commonSection.setMinHeight(500);
 
         // Set up the question section.
         questionSection = new GridPane();
@@ -186,7 +186,7 @@ public class QuizApp extends Application {
         gridPane.setAlignment(Pos.CENTER);
 
         // Set up the scene.
-        Scene scene = new Scene(root, 1200, 700);
+        Scene scene = new Scene(root, 1132, 660);
         Scene authenticationScene = new Scene(gridPane, 500, 250);
         scene.getStylesheets().add("style.css");
         authenticationScene.getStylesheets().add("style.css");
@@ -440,6 +440,4 @@ public class QuizApp extends Application {
         scaleTransition.play();
         trophyStage.show();
     }
-
-
 }
