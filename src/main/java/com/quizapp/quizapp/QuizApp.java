@@ -1,6 +1,8 @@
 package com.quizapp.quizapp;
 
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -10,10 +12,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 import java.net.URI;
@@ -34,6 +41,10 @@ public class QuizApp extends Application {
     private Label timerLabel;
     private Properties userDatabase = new Properties();
     private final String userDataFile = "userData.properties";
+    // Variables, used for audio.
+    private File soundFile = new File("success.mp3");
+    private Media media = new Media(soundFile.toURI().toString());
+    MediaPlayer player = new MediaPlayer(media);
 
     public static void main(String[] args) {
         launch(args);
@@ -78,6 +89,14 @@ public class QuizApp extends Application {
             Question currentQuestion = questions.get(currentQuestionIndex);
             boolean isCorrect = currentQuestion.isAnswerCorrect();
             currentQuestion.showResult(isCorrect);
+            // Set up the trophy animation after clicking this button.
+            boolean allAnsweredCorrectly = questions.stream().allMatch(Question::wasAnsweredCorrectly);
+            if (allAnsweredCorrectly) {
+                // Set on a delay so the stage pops up more smoothly.
+                PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
+                delay.setOnFinished(event -> displayTrophyStage());
+                delay.play();
+            }
         });
         nextButton.setOnAction(e -> {
             if (currentQuestionIndex < questions.size() - 1) {
@@ -294,31 +313,22 @@ public class QuizApp extends Application {
 
         // Q1.
         QuestionGenerator.windQuestion(questions);
-
         // Q2.
         QuestionGenerator.windQuestion(questions);
-
         // Q3.
         QuestionGenerator.termsQuestion(questions);
-
         // Q4.
         QuestionGenerator.slideQuestion(questions);
-
         // Q5.
         QuestionGenerator.slideQuestion(questions);
-
         // Q6.
         QuestionGenerator.trueFalseQuestion(questions);
-
         // Q7.
         QuestionGenerator.trueFalseQuestion(questions);
-
         // Q8.
         QuestionGenerator.periodQuestion(questions);
-
         // Q9.
         QuestionGenerator.periodQuestion(questions);
-
         // Q10.
         QuestionGenerator.slideQuestion(questions);
 
@@ -378,5 +388,37 @@ public class QuizApp extends Application {
     private void showHintOnTimeout() {
         Question currentQuestion = questions.get(currentQuestionIndex);
         currentQuestion.showHint();
+    }
+
+    // Method to display a small animation after all questions are answered correctly.
+    private void displayTrophyStage() {
+        // Import image
+        Image image = new Image("file:trophy.png");
+        ImageView imageView = new ImageView(image);
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(200);
+        // Scale transition animation and audio.
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1.5), imageView);
+        scaleTransition.setFromX(1);
+        scaleTransition.setFromY(1);
+        scaleTransition.setToX(1.8);
+        scaleTransition.setToY(1.8);
+        scaleTransition.setCycleCount(2);
+        scaleTransition.setAutoReverse(true);
+        player.play();
+        // Layout for the stage.
+        StackPane layout = new StackPane(imageView);
+        layout.setStyle("-fx-background-color: #addea6;");
+        layout.setAlignment(Pos.CENTER);
+        // Create a new stage.
+        Stage trophyStage = new Stage();
+        trophyStage.setTitle("Congratulations!");
+        Scene trophyScene = new Scene(layout, 500, 250);
+        trophyStage.setScene(trophyScene);
+        trophyStage.setAlwaysOnTop(true);
+        trophyStage.setResizable(false);
+        // Play animation.
+        scaleTransition.play();
+        trophyStage.show();
     }
 }
