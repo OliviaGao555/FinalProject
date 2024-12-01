@@ -60,6 +60,14 @@ public class QuizApp extends Application {
         Button openGoogleButton = new Button("Ask Google!");
         Button openChatButton = new Button("Ask Chat!");
         HBox hButtons = new HBox(25, submitButton, helpButton, previousButton, nextButton, openGoogleButton, openChatButton);
+
+        // Set up progression bar
+        ProgressBar progressBar = new ProgressBar();
+        progressBar.setOnCircleClickListener(questionIndex -> {
+            // Navigate to the corresponding question
+            currentQuestionIndex = questionIndex;
+            displayQuestion(questionIndex);
+        });
         // Set up timer label.
         timerLabel = new Label("Time left: " + timeLimit + " seconds");
         timerLabel.setStyle("-fx-text-fill: #addea6;");
@@ -68,17 +76,25 @@ public class QuizApp extends Application {
         commonSection = new VBox();
         commonSection.getChildren().add(hButtons);
         commonSection.getChildren().add(timerLabel);
+        commonSection.getChildren().add(progressBar.getPane());
         commonSection.setSpacing(10);   // Space between timer & buttons
         commonSection.setPadding(new Insets(20));   // Space wrapped around the common section
-        commonSection.setPrefHeight(100);
+        commonSection.setPrefHeight(200);
+        commonSection.setMaxHeight(200);
+        commonSection.setMinHeight(200);
+
         // Set up the question section.
         questionSection = new GridPane();
         questionSection.setPadding(new Insets(20));   // Space wrapped around the question section
+        questionSection.setPrefHeight(500);
+        questionSection.setMinHeight(500);
+        questionSection.setMaxHeight(500);
 
         // Set up the root.
         root = new BorderPane();
         root.setCenter(questionSection);
         root.setBottom(commonSection);
+
 
         // Initialize questions and display the first question.
         initializeQuestions();
@@ -89,6 +105,9 @@ public class QuizApp extends Application {
             Question currentQuestion = questions.get(currentQuestionIndex);
             boolean isCorrect = currentQuestion.isAnswerCorrect();
             currentQuestion.showResult(isCorrect);
+            // Update the color of the progress bar
+            progressBar.updateCircleColor(currentQuestionIndex, isCorrect);
+
             // Set up the trophy animation after clicking this button.
             boolean allAnsweredCorrectly = questions.stream().allMatch(Question::wasAnsweredCorrectly);
             if (allAnsweredCorrectly) {
@@ -167,7 +186,7 @@ public class QuizApp extends Application {
         gridPane.setAlignment(Pos.CENTER);
 
         // Set up the scene.
-        Scene scene = new Scene(root, 1132, 700);
+        Scene scene = new Scene(root, 1200, 700);
         Scene authenticationScene = new Scene(gridPane, 500, 250);
         scene.getStylesheets().add("style.css");
         authenticationScene.getStylesheets().add("style.css");
@@ -421,4 +440,6 @@ public class QuizApp extends Application {
         scaleTransition.play();
         trophyStage.show();
     }
+
+
 }
