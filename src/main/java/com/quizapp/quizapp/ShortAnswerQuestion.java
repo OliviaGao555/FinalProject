@@ -5,6 +5,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +23,10 @@ public class ShortAnswerQuestion implements Question {
     private String help;
     private String hint;
     private boolean lastAnswerWasCorrect = false;
+    // Variables, used for audio.
+    private File soundFile = new File("ding.mp3");
+    private Media media = new Media(soundFile.toURI().toString());
+    MediaPlayer player = new MediaPlayer(media);
 
     // Constructor.
     public ShortAnswerQuestion(List<String> questionTexts, List<String> correctAnswers, String help, String hint) {
@@ -70,6 +78,7 @@ public class ShortAnswerQuestion implements Question {
         helpLabel.setMaxWidth(845);
         ScrollPane scrollPane = new ScrollPane(helpLabel);
         scrollPane.setMaxHeight(200);
+        scrollPane.setMinHeight(200);
         scrollPane.setMaxWidth(865);
         questionV.getChildren().add(scrollPane);
 
@@ -106,12 +115,15 @@ public class ShortAnswerQuestion implements Question {
             resultLabel.setText("All answers are correct!");
             resultLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold");
             for (int i = 0; i < answerInputs.size(); i++) {
+                answerInputs.get(i).getStyleClass().remove("custom-wrong-text-field");
                 answerInputs.get(i).getStyleClass().add("custom-right-text-field");
             }
+            player.play();
         } else {
             resultLabel.setText("One or more answers are incorrect. Try again!");
             resultLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold");
             for (int i = 0; i < answerInputs.size(); i++) {
+                answerInputs.get(i).getStyleClass().remove("custom-right-text-field");
                 answerInputs.get(i).getStyleClass().add("custom-wrong-text-field");
             }
         }
