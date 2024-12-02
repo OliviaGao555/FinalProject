@@ -7,13 +7,10 @@ import javafx.scene.shape.Line;
 
 public class ProgressBar {
     private Pane pane;
-    private int[] answerState;
     private Circle[] circles;
     private OnCircleClickListener listener;
 
     public ProgressBar() {
-        answerState = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
         // Create the line
         Line line = new Line(20, 35, 820, 35);
         line.setStrokeWidth(2);
