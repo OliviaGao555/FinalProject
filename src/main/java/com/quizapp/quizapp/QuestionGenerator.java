@@ -69,12 +69,8 @@ public class QuestionGenerator {
         // Shuffle the options.
         String[] shuffledOptions = shuffleOptions(options);
         // Add the question to the list.
-        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, correctAnswer, help, hint));
+        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, correctAnswer, help, hint, 200));
     }
-
-
-
-
 
     /**
      * Adds a true or false question into the questions that will be displayed to the user.
@@ -126,7 +122,7 @@ public class QuestionGenerator {
         // Write the question itself.
         String questionText = String.format("With a block of mass m, the frequency of a block-spring system is %,.2f Hz. " +
                 "When %,.2f g are added, the frequency drops to %,.2f Hz.\nm equals to %s g.", f1, addedMass, f2, mass);
-        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, result, help, hint));
+        questions.add(new MultipleChoiceQuestion(questionText, shuffledOptions, result, help, hint, 250));
     }
 
     /**
@@ -176,7 +172,7 @@ public class QuestionGenerator {
                 "The period of this pendulum system is %,.2f s", length, period, period);
         String hint = "Think about the formula:\nT = 2\u03C0\u221A(l/g)";
         // Add the question to the list.
-        questions.add(new ShortAnswerQuestion(q, a, help, hint));
+        questions.add(new ShortAnswerQuestion(q, a, help, hint, 270));
     }
 
     /**
@@ -201,7 +197,7 @@ public class QuestionGenerator {
                 "- The number of oscillations per second is measured in Hertz (Hz).\n" +
                 "- The time to complete one full cycle of motion is the inverse of frequency.";
         // Add the question to the list.
-        questions.add(new ShortAnswerQuestion(question, correctAnswer, help, hint));
+        questions.add(new ShortAnswerQuestion(question, correctAnswer, help, hint, 140));
     }
 
     /**
@@ -264,7 +260,7 @@ public class QuestionGenerator {
         String hint = "Here are some useful formulas:\n" +
                 "KE = \u00BDmV\u00B2\nPE = \u00BDkX\u00B2\nE = EK + EP";
         // Add the question to the list.
-        questions.add(new ShortAnswerQuestion(question, correctAnswer, help, hint));
+        questions.add(new ShortAnswerQuestion(question, correctAnswer, help, hint, 125));
     }
 
     /**

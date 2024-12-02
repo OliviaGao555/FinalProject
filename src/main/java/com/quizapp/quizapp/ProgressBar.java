@@ -49,6 +49,9 @@ public class ProgressBar {
             numberLabel.setLayoutX(circles[i].getCenterX() - 5);
             numberLabel.setLayoutY(circles[i].getCenterY() - 35);
             pane.getChildren().add(numberLabel);
+            if(i==9) {
+                numberLabel.setLayoutX(circles[i].getCenterX() - 10);
+            }
         }
     }
 

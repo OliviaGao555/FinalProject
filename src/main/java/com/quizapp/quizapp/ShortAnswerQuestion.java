@@ -23,13 +23,14 @@ public class ShortAnswerQuestion implements Question {
     private String help;
     private String hint;
     private boolean lastAnswerWasCorrect = false;
+    private double helpHeight;
     // Variables, used for audio.
     private File soundFile = new File("ding.mp3");
     private Media media = new Media(soundFile.toURI().toString());
     MediaPlayer player = new MediaPlayer(media);
 
     // Constructor.
-    public ShortAnswerQuestion(List<String> questionTexts, List<String> correctAnswers, String help, String hint) {
+    public ShortAnswerQuestion(List<String> questionTexts, List<String> correctAnswers, String help, String hint, double helpHeight) {
         this.questionTexts = new ArrayList<>(questionTexts);
         this.correctAnswers = new ArrayList<>(correctAnswers);
         this.answerInputs = new ArrayList<>();
@@ -39,6 +40,7 @@ public class ShortAnswerQuestion implements Question {
         }
         this.help = help;
         this.hint = hint;
+        this.helpHeight = helpHeight;
     }
 
     @Override
@@ -77,8 +79,8 @@ public class ShortAnswerQuestion implements Question {
         helpLabel.setPadding(new Insets(10));
         helpLabel.setMaxWidth(845);
         ScrollPane scrollPane = new ScrollPane(helpLabel);
-        scrollPane.setMaxHeight(200);
-        scrollPane.setMinHeight(200);
+        scrollPane.setMaxHeight(helpHeight);
+        scrollPane.setMinHeight(helpHeight);
         scrollPane.setMaxWidth(865);
         questionV.getChildren().add(scrollPane);
 
