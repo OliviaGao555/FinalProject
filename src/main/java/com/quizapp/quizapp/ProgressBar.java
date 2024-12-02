@@ -15,7 +15,7 @@ public class ProgressBar {
         answerState = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
         // Create the line
-        Line line = new Line(20, 35, 820, 35);  // Line from x=50 to x=850
+        Line line = new Line(20, 35, 820, 35);
         line.setStrokeWidth(2);
         // Create a Pane to hold both the line and circles
         pane = new Pane();

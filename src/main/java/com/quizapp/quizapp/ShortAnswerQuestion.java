@@ -85,7 +85,8 @@ public class ShortAnswerQuestion implements Question {
         questionV.getChildren().add(scrollPane);
 
         // If all answers were previously correct, show the result as correct
-        if (allPreviouslyCorrect && !userCorrectAnswers.contains(null)) { // Check if all answers were correct
+        if (allPreviouslyCorrect && !userCorrectAnswers.contains(null)) {
+            // Check if all answers were correct
             showResult(true);
         }
 
@@ -99,8 +100,10 @@ public class ShortAnswerQuestion implements Question {
         for (int i = 0; i < correctAnswers.size(); i++) {
             String userAnswer = answerInputs.get(i).getText().trim();
             if (!userAnswer.equalsIgnoreCase(correctAnswers.get(i))) {
-                allCorrect = false; // Mark as incorrect if any answer doesn't match
-                userCorrectAnswers.set(i, null); // Reset the answer if it's incorrect
+                // Mark as incorrect if any answer doesn't match
+                allCorrect = false;
+                // Reset the answer if it's incorrect
+                userCorrectAnswers.set(i, null);
             } else {
                 // Save correct answer
                 userCorrectAnswers.set(i, userAnswer);

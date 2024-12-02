@@ -3,7 +3,7 @@ package com.quizapp.quizapp;
 import javafx.scene.layout.Pane;
 
 public interface Question {
-    //
+    // Put question elements in place.
     Pane getQuestionPane();
     // See if the user input answer is correct, record the correct answer.
     boolean isAnswerCorrect();

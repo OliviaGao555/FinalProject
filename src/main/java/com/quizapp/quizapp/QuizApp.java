@@ -77,15 +77,15 @@ public class QuizApp extends Application {
         commonSection.getChildren().add(hButtons);
         commonSection.getChildren().add(timerLabel);
         commonSection.getChildren().add(progressBar.getPane());
-        commonSection.setSpacing(10);   // Space between timer & buttons
-        commonSection.setPadding(new Insets(20));   // Space wrapped around the common section
+        commonSection.setSpacing(10);
+        commonSection.setPadding(new Insets(20));
         commonSection.setPrefHeight(500);
         commonSection.setMaxHeight(500);
         commonSection.setMinHeight(500);
 
         // Set up the question section.
         questionSection = new GridPane();
-        questionSection.setPadding(new Insets(20));   // Space wrapped around the question section
+        questionSection.setPadding(new Insets(20));
         questionSection.setPrefHeight(500);
         questionSection.setMinHeight(500);
         questionSection.setMaxHeight(500);
@@ -94,7 +94,6 @@ public class QuizApp extends Application {
         root = new BorderPane();
         root.setCenter(questionSection);
         root.setBottom(commonSection);
-
 
         // Initialize questions and display the first question.
         initializeQuestions();
@@ -277,6 +276,7 @@ public class QuizApp extends Application {
         registerStage.setResizable(false);
         registerStage.setScene(registerScene);
         registerStage.setTitle("Register Window");
+        registerStage.setResizable(false);
         registerStage.show();
 
         returnButton.setOnAction(e -> {
@@ -396,7 +396,8 @@ public class QuizApp extends Application {
 
             if (timeLeft[0] <= 0) {
                 timer.stop();
-                showHintOnTimeout();  // Show hint if the time runs out
+                // Show hint if the time runs out
+                showHintOnTimeout();
             }
         }));
         timer.setCycleCount(timeLimit);
